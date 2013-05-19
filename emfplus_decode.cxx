@@ -21,27 +21,88 @@ int main () {
     return 0;
 }
 
+// forward declarations of redirect operators
+std::ostream& operator << (std::ostream&, EmfMetafileHeader&);
+std::ostream& operator << (std::ostream&, EmfMetafileHeaderExt1&);
+std::ostream& operator << (std::ostream&, EmfMetafileHeaderExt2&);
+
+
 std::ostream& operator << (std::ostream &s, Header &header) {
     std::ios_base::fmtflags basefield = s.basefield;
 
-    EmfMetafileHeader *emfHeader = header.header;
-    EmfMetafileHeaderExt1 *emfHeaderExt1 = header.headerExt1;
-    EmfMetafileHeaderExt2 *emfHeaderExt2 = header.headerExt2;
-
-    s << "Type: 0x"   << std::hex << header.type << "(" << sizeof(header.type) << ")" << endl
-      << "Size: "     << std::dec << header.size << endl
-      << "Bounds: "   << endl
-      << "\tLeft: \t"    << emfHeader->bounds->left << endl
-      << "\tTop: \t"     << emfHeader->bounds->top << endl
-      << "\tRight: \t"   << emfHeader->bounds->right << endl
-      << "\tBottom: "  << emfHeader->bounds->bottom << endl
-      << "Frame: "    << endl
-      << "\tLeft: \t"   << emfHeader->frame->left << endl
-      << "\tTop: \t"    << emfHeader->frame->top << endl
-      << "\tRight: \t"  << emfHeader->frame->right << endl
-      << "\tBottom: " << emfHeader->frame->bottom << endl
-      << "RecordSignature: " << std::hex << emfHeader->recordSignature << endl;
+    s << "EMR_HEADER        " << endl
+      << "==================================" << endl
+      << "Type:             " << std::hex << std::showbase << header.type << endl
+      << "Size:             " << std::dec << header.size << endl;
     
+    s.setf(basefield);
+
+    s << *header.header << endl;
+
+    if (header.headerExt1) {
+        s << *header.headerExt1 << endl;
+    }
+
+    if (header.headerExt2) {
+        s << *header.headerExt2 << endl;
+    }
+
+    return s;
+}
+
+std::ostream& operator << (std::ostream &s, EmfMetafileHeader &emfHeader) {
+    std::ios_base::fmtflags basefield = s.basefield;
+
+    s << "Bounds:           " << endl
+      << "    Left:         " << emfHeader.bounds->left << endl
+      << "    Top:          " << emfHeader.bounds->top << endl
+      << "    Right:        " << emfHeader.bounds->right << endl
+      << "    Bottom:       " << emfHeader.bounds->bottom << endl
+      << "Frame:            " << endl
+      << "    Left:         " << emfHeader.frame->left << endl
+      << "    Top:          " << emfHeader.frame->top << endl
+      << "    Right:        " << emfHeader.frame->right << endl
+      << "    Bottom:       " << emfHeader.frame->bottom << endl
+      << "RecordSignature:  " << std::hex << emfHeader.recordSignature << endl
+      << "Version:          " << emfHeader.version << endl
+      << "Bytes:            " << std::dec << emfHeader.bytes << endl
+      << "Records:          " << emfHeader.records << endl
+      << "Handles:          " << emfHeader.handles << endl
+      << "Reserved:         " << std::hex << emfHeader.reserved << endl
+      << "Desc. size:       " << std::dec << emfHeader.nDescription << endl
+      << "Desc. offset:     " << std::hex << emfHeader.offDescription << endl
+      << "PAL entries:      " << std::dec << emfHeader.nPalEntries << endl
+      << "Size (dev units): " << endl
+      << "    cx:           " << emfHeader.device->cx << endl
+      << "    cy:           " << emfHeader.device->cy << endl
+      << "Size (mm):        " << endl
+      << "    cx:           " << emfHeader.millimeters->cx << "mm" << endl
+      << "    cy:           " << emfHeader.millimeters->cy << "mm" << endl; 
+    
+    s.setf(basefield);
+    return s;
+}
+
+std::ostream& operator << (std::ostream &s, EmfMetafileHeaderExt1 &emfHeaderExt1) {
+    std::ios_base::fmtflags basefield = s.basefield;
+
+    s << "Header Extension 1" << endl
+      << "==================================" << endl
+      << "cbPixelFormat:   " << emfHeaderExt1.cbPixelFormat << endl
+      << "offPixelFormat:  " << emfHeaderExt1.offPixelFormat << endl;
+
+    s.setf(basefield);
+    return s;
+}
+
+std::ostream& operator << (std::ostream &s, EmfMetafileHeaderExt2 &emfHeaderExt2) {
+    std::ios_base::fmtflags basefield = s.basefield;
+
+    s << "Header Extension 2" << endl
+      << "==================================" << endl
+      << "microMetersX:    " << emfHeaderExt2.microMetersX << endl
+      << "microMetersY:    " << emfHeaderExt2.microMetersY << endl;
+
     s.setf(basefield);
     return s;
 }
@@ -129,9 +190,20 @@ EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
 }
 
 EmfMetafileHeaderExt1* ProcessMetafileHeaderExt1(ifstream &emfFile) {
-    return new EmfMetafileHeaderExt1();
+    EmfMetafileHeaderExt1 *emfHeaderExt1 = new EmfMetafileHeaderExt1();
+
+    emfFile.read(reinterpret_cast<char *>(&emfHeaderExt1->cbPixelFormat), 4);
+    emfFile.read(reinterpret_cast<char *>(&emfHeaderExt1->offPixelFormat), 4);
+    emfFile.read(reinterpret_cast<char *>(&emfHeaderExt1->bOpenGL), 4);
+
+    return emfHeaderExt1;
 }
 
 EmfMetafileHeaderExt2* ProcessMetafileHeaderExt2(ifstream &emfFile) {
-    return new EmfMetafileHeaderExt2();
+    EmfMetafileHeaderExt2 *emfHeaderExt2 = new EmfMetafileHeaderExt2();
+
+    emfFile.read(reinterpret_cast<char *>(&emfHeaderExt2->microMetersX), 4);
+    emfFile.read(reinterpret_cast<char *>(&emfHeaderExt2->microMetersY), 4);
+
+    return emfHeaderExt2;
 }
