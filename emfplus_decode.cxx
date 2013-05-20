@@ -204,7 +204,21 @@ void ProcessEMFHeader(ifstream &emfFile)
         }
     }
 
-    cout << "Header size is " << HeaderSize << endl << endl << header << endl;
+    string headerType = new string;
+
+    if (HeaderSize >= 108) {
+        headerType = "EmfMetafileHeaderExtension2";
+    } else if (HeaderSize >= 100) {
+        headerType = "EmfMetafileHeaderExtension1";
+    } else if (HeaderSize == 88) {
+        headerType = "EmfMetafileHeader";
+    } else {    // this should NOT be possible!
+         = "invalid!";
+    }
+
+    cout << "Header size is " << HeaderSize << "." << endl;
+    cout << "Record type for header is " << headerType << endl << endl;
+    cout << header << endl;
 }
 
 EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
