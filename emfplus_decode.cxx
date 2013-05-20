@@ -146,7 +146,65 @@ void ProcessEMFHeader(ifstream &emfFile)
     header.headerExt1=emfHeaderExt1;
     header.headerExt2=emfHeaderExt2;
 
-    cout << header;
+    // process header size based on algorithm as described in [MS-EMF]
+    // section 2.3.4.2 EMR_HEADER Record Types
+
+    int HeaderSize=88;
+
+    if (header.size < 88) {
+        cerr << "Header size less than 88 bytes - possible file "
+                "corruption!";
+    } else {
+        HeaderSize=header.size;
+
+        // offDescription is a 32-bit unsigned integer that specifies the
+        // position in the header (offset from the beginning) where the 
+        // description array exists (0 indicates no description)
+         
+        if (emfHeader->offDescription != 0 &&       // cannot be < size
+            emfHeader->offDescription < 88) {       // of header!
+            cerr << "offDescription cannot be less than the min size "
+                    "of EMF header - possible file corruption!";
+        } else if (emfHeader->offDescription != 0) {
+            // nDescription is the size of the UTF16-LE encoded 
+            // description...
+            // obviously the offset position of the description + the
+            // size of the description cannot be bigger than the size of
+            // the header
+            int descSize = emfHeader->offDescription +
+                            (emfHeader->nDescription * 2);
+
+            if (descSize > header.size) {
+                cerr << "Invalid description data! This may indicate "
+                        "the EMF file is corrupted";
+            } else {
+                HeaderSize = emfHeader->offDescription;
+            }
+
+            // header is large enough to contain extensions
+            if (HeaderSize >= 100) {
+
+                // valid pixel format values?
+                int pixelSize = emfHeaderExt1->offPixelFormat + 
+                                    emfHeaderExt1->cbPixelFormat;
+
+                if (emfHeaderExt1->offPixelFormat >= 100 &&
+                        pixelSize <= header.size) {
+                    // yep! Then is the pixel format located before
+                    // the description?
+                    if (emfHeaderExt1->offPixelFormat < 
+                            emfHeader->offDescription) {
+                        HeaderSize = emfHeaderExt1->offPixelFormat;
+                    }
+                } else {
+                    cerr << "Invalid pixel format size! This may "
+                            "indicate the EMF file is corrupted";
+                }
+            }
+        }
+    }
+
+    cout << "Header size is " << HeaderSize << endl << endl << header << endl;
 }
 
 EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
