@@ -204,20 +204,20 @@ void ProcessEMFHeader(ifstream &emfFile)
         }
     }
 
-    string headerType = new string;
+    string *headerType;
 
     if (HeaderSize >= 108) {
-        headerType = "EmfMetafileHeaderExtension2";
+        headerType = new string("EmfMetafileHeaderExtension2");
     } else if (HeaderSize >= 100) {
-        headerType = "EmfMetafileHeaderExtension1";
+        headerType = new string("EmfMetafileHeaderExtension1");
     } else if (HeaderSize == 88) {
-        headerType = "EmfMetafileHeader";
+        headerType = new string("EmfMetafileHeader");
     } else {    // this should NOT be possible!
-         = "invalid!";
+        headerType = new string("invalid!");
     }
 
     cout << "Header size is " << HeaderSize << "." << endl;
-    cout << "Record type for header is " << headerType << endl << endl;
+    cout << "Record type for header is " << *headerType << endl << endl;
     cout << header << endl;
 }
 
@@ -240,11 +240,11 @@ EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
 
     emfFile.read(reinterpret_cast<char *>(&emfHeader->recordSignature), 4);
 
-    if (emfSignature->recordSignature != ENHMETA_SIGNATURE) {
+    if (emfHeader->recordSignature != ENHMETA_SIGNATURE) {
         cerr << "Record signature not valid in header! Should be "
              << "0x464D4520 (\"EMF \") but it is " 
              << std::hex << std::showbase 
-                << emfSignature->recordSignature;
+                << emfHeader->recordSignature;
     }
 
     emfFile.read(reinterpret_cast<char *>(&emfHeader->version), 4);
