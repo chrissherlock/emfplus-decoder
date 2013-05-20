@@ -78,11 +78,10 @@ typedef struct {
 
 */
 
-typedef enum
-{
-    ENHMETA_SIGNATURE = 0x464D4520,
-    EPS_SIGNATURE     = 0x46535045
-} FormatSignature;
+// note that [MS-EMF] states in section 2.1.14 that this should
+// be an enumeration... I disagree!
+#define ENHMETA_SIGNATURE  0x464D4520
+#define EPS_SIGNATURE      0x46535045
 
 typedef struct {
     RectL           *bounds;

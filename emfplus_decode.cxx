@@ -63,14 +63,14 @@ std::ostream& operator << (std::ostream &s, EmfMetafileHeader &emfHeader) {
       << "    Top:          " << emfHeader.frame->top << endl
       << "    Right:        " << emfHeader.frame->right << endl
       << "    Bottom:       " << emfHeader.frame->bottom << endl
-      << "RecordSignature:  " << std::hex << emfHeader.recordSignature << endl
+      << "RecordSignature:  " << std::hex << std::showbase << emfHeader.recordSignature << endl
       << "Version:          " << emfHeader.version << endl
       << "Bytes:            " << std::dec << emfHeader.bytes << endl
       << "Records:          " << emfHeader.records << endl
       << "Handles:          " << emfHeader.handles << endl
-      << "Reserved:         " << std::hex << emfHeader.reserved << endl
+      << "Reserved:         " << std::hex << std::showbase << emfHeader.reserved << endl
       << "Desc. size:       " << std::dec << emfHeader.nDescription << endl
-      << "Desc. offset:     " << std::hex << emfHeader.offDescription << endl
+      << "Desc. offset:     " << std::hex << std::showbase << emfHeader.offDescription << endl
       << "PAL entries:      " << std::dec << emfHeader.nPalEntries << endl
       << "Size (dev units): " << endl
       << "    cx:           " << emfHeader.device->cx << endl
@@ -239,11 +239,29 @@ EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
     emfFile.read(reinterpret_cast<char *>(&emfHeader->frame->bottom), 4);
 
     emfFile.read(reinterpret_cast<char *>(&emfHeader->recordSignature), 4);
+
+    if (emfSignature->recordSignature != ENHMETA_SIGNATURE) {
+        cerr << "Record signature not valid in header! Should be "
+             << "0x464D4520 (\"EMF \") but it is " 
+             << std::hex << std::showbase 
+                << emfSignature->recordSignature;
+    }
+
     emfFile.read(reinterpret_cast<char *>(&emfHeader->version), 4);
     emfFile.read(reinterpret_cast<char *>(&emfHeader->bytes), 4);
     emfFile.read(reinterpret_cast<char *>(&emfHeader->records), 4);
     emfFile.read(reinterpret_cast<char *>(&emfHeader->handles), 4);
     emfFile.read(reinterpret_cast<char *>(&emfHeader->reserved), 4);
+
+    // note: this MUST be 0x0000 and according to Microsoft it MUST be
+    // ignored... however, this makes a nice check to see if there is
+    // corruption :-) So I ignore Microsoft 
+
+    if (emfHeader->reserved != 0x0000) {
+        cerr << "Reserved field MUST be 0x0000, but is actually "
+             << std::hex << std::showbase << emfHeader->reserved;
+    }
+
     emfFile.read(reinterpret_cast<char *>(&emfHeader->nDescription), 4);
     emfFile.read(reinterpret_cast<char *>(&emfHeader->offDescription), 4);
     emfFile.read(reinterpret_cast<char *>(&emfHeader->nPalEntries), 4);
