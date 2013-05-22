@@ -10,6 +10,7 @@ void ProcessEMFHeader(ifstream&);
 EmfMetafileHeader*       ProcessMetafileHeader(ifstream&);
 EmfMetafileHeaderExt1*   ProcessMetafileHeaderExt1(ifstream&);
 EmfMetafileHeaderExt2*   ProcessMetafileHeaderExt2(ifstream&);
+EmfMetafileHeaderDesc*   ProcessMetafileHeaderDesc(ifstream&, int, int);
 
 std::ostream& operator << (std::ostream&, Header&); 
 
@@ -25,7 +26,7 @@ int main () {
 std::ostream& operator << (std::ostream&, EmfMetafileHeader&);
 std::ostream& operator << (std::ostream&, EmfMetafileHeaderExt1&);
 std::ostream& operator << (std::ostream&, EmfMetafileHeaderExt2&);
-
+std::ostream& operator << (std::ostream&, EmfMetafileHeaderDesc&);
 
 std::ostream& operator << (std::ostream &s, Header &header) {
     std::ios_base::fmtflags basefield = s.basefield;
@@ -107,11 +108,31 @@ std::ostream& operator << (std::ostream &s, EmfMetafileHeaderExt2 &emfHeaderExt2
     return s;
 }
 
+std::ostream& operator << (std::ostream &s, EmfMetafileHeaderDesc &emfHeaderDesc) {
+    std::ios_base::fmtflags basefield = s.basefield;
+
+    s.setf(basefield);
+    return s;
+}
+
+
 void ProcessEMFHeader(ifstream &emfFile)
 {
     Header header;
+
+    // get the file size
+    int fileSize;
+    emfFile.seekg(0, ios::end);
+    fileSize = emfFile.tellg();
     emfFile.seekg(0, ios::beg);
+
     emfFile.read(reinterpret_cast<char *>(&header.type), 4);
+
+    if (header.type != EMR_HEADER) {
+        cerr << "Header RecordType is not EMR_HEADER! It is " 
+             << header.type;
+    }
+
     emfFile.read(reinterpret_cast<char *>(&header.size), 4);
     
     // Detect what sort of header extension is being used
@@ -224,6 +245,15 @@ void ProcessEMFHeader(ifstream &emfFile)
 EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
     EmfMetafileHeader *emfHeader = new EmfMetafileHeader();
 
+    // get the file size
+    int fileSize;
+    int currentPos;
+
+    currentPos = emfFile.tellg()
+    emfFile.seekg(0, ios::end);
+    fileSize = emfFile.tellg();
+    emfFile.seekg(currentPos, ios::beg);
+
     // bounds box (in device units)
     emfHeader->bounds = new RectL();
     emfFile.read(reinterpret_cast<char *>(&emfHeader->bounds->left), 4);
@@ -250,6 +280,13 @@ EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
     emfFile.read(reinterpret_cast<char *>(&emfHeader->version), 4);
     emfFile.read(reinterpret_cast<char *>(&emfHeader->bytes), 4);
     emfFile.read(reinterpret_cast<char *>(&emfHeader->records), 4);
+
+    if (emfHeader.bytes != fileSize) {
+        cerr << "Header bytes field is not the same as the filesize! "
+             << "bytes field is " << emfHeader.bytes 
+             << " and the size of the file is " << fileSize << ".";
+    }
+
     emfFile.read(reinterpret_cast<char *>(&emfHeader->handles), 4);
     emfFile.read(reinterpret_cast<char *>(&emfHeader->reserved), 4);
 
@@ -297,3 +334,10 @@ EmfMetafileHeaderExt2* ProcessMetafileHeaderExt2(ifstream &emfFile) {
 
     return emfHeaderExt2;
 }
+
+EmfMetafileHeaderDesc*   ProcessMetafileHeaderDesc(ifstream&, int offset, int size) {
+    EmfMetafileHeaderDesc *emfHeaderDesc = new EmfMetafileHeaderDesc();
+
+    return emfHeaderDesc;
+}
+
