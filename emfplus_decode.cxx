@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <cwchar>
 
 #include "emfheader.hxx"
 
@@ -249,7 +250,7 @@ EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
     int fileSize;
     int currentPos;
 
-    currentPos = emfFile.tellg()
+    currentPos = emfFile.tellg();
     emfFile.seekg(0, ios::end);
     fileSize = emfFile.tellg();
     emfFile.seekg(currentPos, ios::beg);
@@ -281,9 +282,9 @@ EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
     emfFile.read(reinterpret_cast<char *>(&emfHeader->bytes), 4);
     emfFile.read(reinterpret_cast<char *>(&emfHeader->records), 4);
 
-    if (emfHeader.bytes != fileSize) {
+    if (emfHeader->bytes != fileSize) {
         cerr << "Header bytes field is not the same as the filesize! "
-             << "bytes field is " << emfHeader.bytes 
+             << "bytes field is " << emfHeader->bytes 
              << " and the size of the file is " << fileSize << ".";
     }
 
@@ -335,8 +336,21 @@ EmfMetafileHeaderExt2* ProcessMetafileHeaderExt2(ifstream &emfFile) {
     return emfHeaderExt2;
 }
 
-EmfMetafileHeaderDesc*   ProcessMetafileHeaderDesc(ifstream&, int offset, int size) {
+EmfMetafileHeaderDesc*   ProcessMetafileHeaderDesc(ifstream& emfFile, int offset, int size) {
     EmfMetafileHeaderDesc *emfHeaderDesc = new EmfMetafileHeaderDesc();
+
+    if (offset != 0) {
+        int currentPos;
+
+        currentPos = emfFile.tellg();
+        emfFile.seekg(offset, ios::beg);
+
+        emfFile.read(reinterpret_cast<char *>(&emfHeaderDesc->description), 2*size);
+
+        emfFile.seekg(currentPos, ios::beg);
+    } else {
+        emfHeaderDesc->description = new UTF_16LE();
+    }
 
     return emfHeaderDesc;
 }

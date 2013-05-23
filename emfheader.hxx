@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <cwchar>
+#include <string>
 
 #ifndef EMFHEADER
 #define EMFHEADER
@@ -232,12 +234,19 @@ typedef struct {
     unsigned int    microMetersY;
 } EmfMetafileHeaderExt2;
 
+typedef basic_string<wchar_t> UTF_16LE;
+
+typedef struct {
+    UTF_16LE        *description;
+} EmfMetafileHeaderDesc;
+
 typedef struct {
     unsigned int           type;
     unsigned int           size;
     EmfMetafileHeader     *header;
     EmfMetafileHeaderExt1 *headerExt1;
     EmfMetafileHeaderExt2 *headerExt2;
+    EmfMetafileHeaderDesc *headerDesc;
 } Header;
 
 #endif
