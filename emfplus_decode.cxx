@@ -542,7 +542,7 @@ PFFlags ExtractEMFFlags(const int flags) {
     // bit 32 is 0
 
     if (returnFlags.PFD_SUPPORT_GDI && returnFlags.PFD_DOUBLEBUFFER) {
-        cerr << "PFD_SUPPORT_GDI and PFD_DOUBLE_BUFFER must "
+        cerr << "PFD_SUPPORT_GDI and PFD_DOUBLEBUFFER must "
              << "NOT both be set!" << endl;
     }
 
