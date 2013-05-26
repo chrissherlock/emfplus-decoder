@@ -241,15 +241,6 @@ typedef struct {
 } EmfMetafileHeaderDesc;
 
 typedef struct {
-    unsigned int           type;
-    unsigned int           size;
-    EmfMetafileHeader     *header;
-    EmfMetafileHeaderExt1 *headerExt1;
-    EmfMetafileHeaderExt2 *headerExt2;
-    EmfMetafileHeaderDesc *headerDesc;
-} Header;
-
-typedef struct {
     unsigned PFD_DOUBLEBUFFER           : 1;
     unsigned PFD_STEREO                 : 1;
     unsigned PFD_DRAW_TO_WINDOW         : 1;
@@ -304,4 +295,16 @@ typedef struct {
     int             dwVisibleMask;
     int             dwDamageMask;
 } PixelFormatDescriptor;  
+
+
+typedef struct {
+    unsigned int           type;
+    unsigned int           size;
+    EmfMetafileHeader     *header;
+    EmfMetafileHeaderExt1 *headerExt1;
+    EmfMetafileHeaderExt2 *headerExt2;
+    EmfMetafileHeaderDesc *headerDesc;
+    PixelFormatDescriptor *headerPxlFmtDesc;
+} Header;
+
 #endif

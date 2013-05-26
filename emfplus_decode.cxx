@@ -32,6 +32,7 @@ std::ostream& operator << (std::ostream&, EmfMetafileHeader&);
 std::ostream& operator << (std::ostream&, EmfMetafileHeaderExt1&);
 std::ostream& operator << (std::ostream&, EmfMetafileHeaderExt2&);
 std::ostream& operator << (std::ostream&, EmfMetafileHeaderDesc&);
+std::ostream& operator << (std::ostream&, PixelFormatDescriptor&);
 
 std::ostream& operator << (std::ostream &s, Header &header) {
     std::ios_base::fmtflags basefield = s.basefield;
@@ -39,7 +40,7 @@ std::ostream& operator << (std::ostream &s, Header &header) {
     s << "EMR_HEADER        " << endl
       << "==================================" << endl
       << "Type:             " << std::hex << std::showbase << header.type << endl
-      << "Size:             " << std::dec << header.size << endl;
+      << "Size:             " << std::dec << header.size << endl << endl;
     
     s.setf(basefield);
 
@@ -47,13 +48,18 @@ std::ostream& operator << (std::ostream &s, Header &header) {
 
     if (header.headerExt1) {
         s << *header.headerExt1 << endl;
+        if (header.headerExt1->offPixelFormat != 0) {
+            s << *header.headerPxlFmtDesc << endl;
+        }
     }
 
     if (header.headerExt2) {
         s << *header.headerExt2 << endl;
     }
 
-    s << *header.headerDesc << endl;
+    if (header.header->offDescription != 0) {
+        s << *header.headerDesc << endl;
+    }
 
     return s;
 }
@@ -120,12 +126,89 @@ std::ostream& operator << (std::ostream &s, EmfMetafileHeaderDesc &emfHeaderDesc
 
     s << "EMF Description" << endl
       << "==================================" << endl
-      << *emfHeaderDesc.description->c_str();
+      << *emfHeaderDesc.description->c_str() << endl;
 
     s.setf(basefield);
     return s;
 }
 
+
+std::ostream& operator << (std::ostream& s, PFFlags &flags) {
+    std::ios_base::fmtflags basefield = s.basefield;
+
+    s << "Pixel format flags:" << endl
+      << "\tPFD_DOUBLEBUFFER: " << (flags.PFD_DOUBLEBUFFER ? "on" : "off") << endl
+      << "\tPFD_STEREO: " << (flags.PFD_STEREO ? "on" : "off") << endl
+      << "\tPFD_DRAW_TO_WINDOW: " << (flags.PFD_DRAW_TO_WINDOW ? "on" : "off") << endl
+      << "\tPFD_DRAW_TO_BITMAP: " << (flags.PFD_DRAW_TO_BITMAP ? "on" : "off") << endl
+      << "\tPFD_SUPPORT_GDI: " << (flags.PFD_SUPPORT_GDI ? "on" : "off") << endl
+      << "\tPFD_SUPPORT_OPENGL: " << (flags.PFD_SUPPORT_OPENGL ? "on" : "off") << endl
+      << "\tPFD_GENERIC_FORMAT: " << (flags.PFD_GENERIC_FORMAT ? "on" : "off") << endl
+      << "\tPFD_NEED_PALETTE: " << (flags.PFD_NEED_PALETTE ? "on" : "off") << endl
+      << "\tPFD_NEED_SYSTEM_PALETTE: " << (flags.PFD_NEED_SYSTEM_PALETTE ? "on" : "off") << endl
+      << "\tPFD_SWAP_EXCHANGE: " << (flags.PFD_SWAP_EXCHANGE ? "on" : "off") << endl
+      << "\tPFD_SWAP_COPY: " << (flags.PFD_SWAP_COPY ? "on" : "off") << endl
+      << "\tPFD_SWAP_LAYER_BUFFERS: " << (flags.PFD_SWAP_LAYER_BUFFERS ? "on" : "off") << endl
+      << "\tPFD_GENERIC_ACCELERATED: " << (flags.PFD_GENERIC_ACCELERATED ? "on" : "off") << endl
+      << "\tPFD_SWAP_DIRECTDRAW: " << (flags.PFD_SUPPORT_DIRECTDRAW ? "on" : "off") << endl
+      << "\tPFD_DIRECT3D_ACCELERATED: " << (flags.PFD_DIRECT3D_ACCELERATED ? "on" : "off") << endl
+      << "\tPFD_SUPPORT_COMPOSITION: " << (flags.PFD_SUPPORT_COMPOSITION ? "on" : "off") << endl
+      << "\tPFD_DOUBLEBUFFER_DONTCARE: " << (flags.PFD_DOUBLEBUFFER_DONTCARE ? "on" : "off") << endl
+      << "\tPFD_STEREO_DONTCARE: " << (flags.PFD_STEREO_DONTCARE ? "on" : "off") << endl;
+
+    s.setf(basefield);
+    return s;
+}
+
+
+std::ostream& operator << (std::ostream& s, PFPixelType &type) {
+    std::ios_base::fmtflags basefield = s.basefield;
+
+    s << "Pixel format type: " 
+      << (type == PFD_TYPE_RGBA ? "PDF_TYPE_RGBA (0x00)" : "PDF_TYPE_COLORINDEX (0x01)") 
+      << endl;
+
+    s.setf(basefield);
+    return s;
+}
+
+std::ostream& operator << (std::ostream& s, PixelFormatDescriptor& pxlFmtDesc) {
+    std::ios_base::fmtflags basefield = s.basefield;
+    
+    s << "EMF Pixel Format Descriptor" << endl
+      << "==================================" << endl
+      << "nSize:           " << pxlFmtDesc.nSize << endl
+      << "nVersion:        " << pxlFmtDesc.nVersion << endl
+      << "dwFlags:         " << pxlFmtDesc.dwFlags << endl
+      << "iPixelType:      " << (pxlFmtDesc.iPixelType == PFD_TYPE_RGBA
+                                    ? "PFD_TYPE_RGBA" 
+                                    : "PFD_TYPE_COLORINDEX") << endl
+      << "cColorBits:      " << pxlFmtDesc.cColorBits << endl
+      << "cRedBits:        " << pxlFmtDesc.cRedBits << endl
+      << "cRedShift:       " << pxlFmtDesc.cRedShift << endl
+      << "cGreenBits:      " << pxlFmtDesc.cGreenBits << endl
+      << "cGreenShift:     " << pxlFmtDesc.cGreenShift << endl
+      << "cBlueBits:       " << pxlFmtDesc.cBlueBits << endl
+      << "cBlueShift:      " << pxlFmtDesc.cBlueShift << endl
+      << "cAlphaBits:      " << pxlFmtDesc.cAlphaBits << endl
+      << "cAlphaShift:     " << pxlFmtDesc.cAlphaShift << endl
+      << "cAccumBits:      " << pxlFmtDesc.cAccumBits << endl
+      << "cAccumRedBits:   " << pxlFmtDesc.cAccumRedBits << endl
+      << "cAccumGreenBits: " << pxlFmtDesc.cAccumGreenBits << endl
+      << "cAccumBlueBits:  " << pxlFmtDesc.cAccumBlueBits << endl
+      << "cAccumAlphaBits: " << pxlFmtDesc.cAccumAlphaBits << endl
+      << "cDepthBits:      " << pxlFmtDesc.cDepthBits << endl
+      << "cStencilBits:    " << pxlFmtDesc.cStencilBits << endl
+      << "cAuxBuffers:     " << pxlFmtDesc.cAuxBuffers << endl
+      << "iLayerType:      " << pxlFmtDesc.iLayerType << endl
+      << "bReserved:       " << pxlFmtDesc.bReserved << endl
+      << "dwLayerMask:     " << pxlFmtDesc.dwLayerMask << endl
+      << "dwVisibleMask:   " << pxlFmtDesc.dwVisibleMask << endl
+      << "dwDamageMask:    " << pxlFmtDesc.dwDamageMask << endl;
+
+    s.setf(basefield);
+    return s;
+}
 
 void ProcessEMFHeader(ifstream &emfFile)
 {
@@ -156,6 +239,7 @@ void ProcessEMFHeader(ifstream &emfFile)
     EmfMetafileHeaderExt1 *emfHeaderExt1;
     EmfMetafileHeaderExt2 *emfHeaderExt2;
     EmfMetafileHeaderDesc *emfDesc;
+    PixelFormatDescriptor  *emfPxlFmtDesc;
 
     switch (header.size) {
         case 88:
@@ -175,6 +259,9 @@ void ProcessEMFHeader(ifstream &emfFile)
             emfHeaderExt2 = ProcessMetafileHeaderExt2(emfFile);
             emfDesc = ProcessMetafileHeaderDesc(emfFile, 
                         emfHeader->offDescription, emfHeader->nDescription);
+            emfPxlFmtDesc = ProcessMetafileHeaderPixelFormat(emfFile,
+                        emfHeaderExt1->offPixelFormat, 
+                        emfHeaderExt1->cbPixelFormat);
             break;
         default:
             break;
