@@ -120,7 +120,7 @@ std::ostream& operator << (std::ostream &s, EmfMetafileHeaderDesc &emfHeaderDesc
 
     s << "EMF Description" << endl
       << "==================================" << endl
-      << emfHeaderDesc.description;
+      << *emfHeaderDesc.description->c_str();
 
     s.setf(basefield);
     return s;
