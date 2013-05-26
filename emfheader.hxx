@@ -249,4 +249,59 @@ typedef struct {
     EmfMetafileHeaderDesc *headerDesc;
 } Header;
 
+typedef struct {
+    unsigned PFD_DOUBLEBUFFER           : 1;
+    unsigned PFD_STEREO                 : 1;
+    unsigned PFD_DRAW_TO_WINDOW         : 1;
+    unsigned PFD_DRAW_TO_BITMAP         : 1;
+    unsigned PFD_SUPPORT_GDI            : 1;
+    unsigned PFD_SUPPORT_OPENGL         : 1;
+    unsigned PFD_GENERIC_FORMAT         : 1;
+    unsigned PFD_NEED_PALETTE           : 1;
+    unsigned PFD_NEED_SYSTEM_PALETTE    : 1;
+    unsigned PFD_SWAP_EXCHANGE          : 1;
+    unsigned PFD_SWAP_COPY              : 1;
+    unsigned PFD_SWAP_LAYER_BUFFERS     : 1;
+    unsigned PFD_GENERIC_ACCELERATED    : 1;
+    unsigned PFD_SUPPORT_DIRECTDRAW     : 1;
+    unsigned PFD_DIRECT3D_ACCELERATED   : 1;
+    unsigned PFD_SUPPORT_COMPOSITION    : 1;
+    unsigned PFD_DEPTH_DONTCARE         : 1;
+    unsigned PFD_DOUBLEBUFFER_DONTCARE  : 1;
+    unsigned PFD_STEREO_DONTCARE        : 1;
+} PFFlags; 
+
+typedef enum {
+    PFD_TYPE_RGBA = 0x00,
+    PFD_TYPE_COLORINDEX = 0x01
+} PFPixelType;
+
+typedef struct {
+    unsigned short  nSize;
+    unsigned short  nVersion;
+    PFFlags         dwFlags;
+    PFPixelType     iPixelType;
+    char            cColorBits;
+    char            cRedBits;
+    char            cRedShift;
+    char            cGreenBits;
+    char            cGreenShift;
+    char            cBlueBits;
+    char            cBlueShift;
+    char            cAlphaBits;
+    char            cAlphaShift;
+    char            cAccumBits;
+    char            cAccumRedBits;
+    char            cAccumGreenBits;
+    char            cAccumBlueBits;
+    char            cAccumAlphaBits;
+    char            cDepthBits;
+    char            cStencilBits;
+    char            cAuxBuffers;
+    char            iLayerType;
+    char            bReserved;
+    int             dwLayerMask;
+    int             dwVisibleMask;
+    int             dwDamageMask;
+} PixelFormatDescriptor;  
 #endif

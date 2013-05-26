@@ -12,6 +12,10 @@ EmfMetafileHeader*       ProcessMetafileHeader(ifstream&);
 EmfMetafileHeaderExt1*   ProcessMetafileHeaderExt1(ifstream&);
 EmfMetafileHeaderExt2*   ProcessMetafileHeaderExt2(ifstream&);
 EmfMetafileHeaderDesc*   ProcessMetafileHeaderDesc(ifstream&, int, int);
+PixelFormatDescriptor*   ProcessMetafileHeaderPixelFormat(ifstream&, int, int);
+
+PFFlags ExtractEMFFlags(const int); 
+PFPixelType ExtractEMFPixelType (const int);
 
 std::ostream& operator << (std::ostream&, Header&); 
 
@@ -48,6 +52,8 @@ std::ostream& operator << (std::ostream &s, Header &header) {
     if (header.headerExt2) {
         s << *header.headerExt2 << endl;
     }
+
+    s << *header.headerDesc << endl;
 
     return s;
 }
@@ -112,6 +118,10 @@ std::ostream& operator << (std::ostream &s, EmfMetafileHeaderExt2 &emfHeaderExt2
 std::ostream& operator << (std::ostream &s, EmfMetafileHeaderDesc &emfHeaderDesc) {
     std::ios_base::fmtflags basefield = s.basefield;
 
+    s << "EMF Description" << endl
+      << "==================================" << endl
+      << emfHeaderDesc.description;
+
     s.setf(basefield);
     return s;
 }
@@ -145,20 +155,26 @@ void ProcessEMFHeader(ifstream &emfFile)
     EmfMetafileHeader *emfHeader;
     EmfMetafileHeaderExt1 *emfHeaderExt1;
     EmfMetafileHeaderExt2 *emfHeaderExt2;
-
+    EmfMetafileHeaderDesc *emfDesc;
 
     switch (header.size) {
         case 88:
             emfHeader = ProcessMetafileHeader(emfFile);
+            emfDesc = ProcessMetafileHeaderDesc(emfFile, 
+                        emfHeader->offDescription, emfHeader->nDescription);
             break;
         case 100:
             emfHeader = ProcessMetafileHeader(emfFile);
             emfHeaderExt1 = ProcessMetafileHeaderExt1(emfFile);
+            emfDesc = ProcessMetafileHeaderDesc(emfFile, 
+                        emfHeader->offDescription, emfHeader->nDescription);
             break;
         case 108:
             emfHeader = ProcessMetafileHeader(emfFile);
             emfHeaderExt1 = ProcessMetafileHeaderExt1(emfFile);
             emfHeaderExt2 = ProcessMetafileHeaderExt2(emfFile);
+            emfDesc = ProcessMetafileHeaderDesc(emfFile, 
+                        emfHeader->offDescription, emfHeader->nDescription);
             break;
         default:
             break;
@@ -167,6 +183,7 @@ void ProcessEMFHeader(ifstream &emfFile)
     header.header=emfHeader;
     header.headerExt1=emfHeaderExt1;
     header.headerExt2=emfHeaderExt2;
+    header.headerDesc=emfDesc;
 
     // process header size based on algorithm as described in [MS-EMF]
     // section 2.3.4.2 EMR_HEADER Record Types
@@ -355,3 +372,109 @@ EmfMetafileHeaderDesc*   ProcessMetafileHeaderDesc(ifstream& emfFile, int offset
     return emfHeaderDesc;
 }
 
+PixelFormatDescriptor*   ProcessMetafileHeaderPixelFormat(ifstream &emfFile, 
+                                int offset, int size) {
+    PixelFormatDescriptor *emfPixelFmt = new PixelFormatDescriptor();
+    int flags;
+    int pixelType;
+
+    if (offset != 0) {
+        int currentPos;
+       
+        currentPos = emfFile.tellg();
+        emfFile.seekg(offset, ios::beg);
+       
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->nSize), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->nVersion), 2);
+        emfFile.read(reinterpret_cast<char *>(flags), 4);
+        emfFile.read(reinterpret_cast<char *>(pixelType), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cColorBits), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cRedBits), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cRedShift), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cGreenBits), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cGreenShift), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cBlueBits), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cBlueShift), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cAlphaBits), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cAlphaShift), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cAccumBits), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cAccumRedBits), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cAccumGreenBits), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cAccumBlueBits), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cAccumAlphaBits), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cDepthBits), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cStencilBits), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->cAuxBuffers), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->iLayerType), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->bReserved), 2);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->dwLayerMask), 4);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->dwVisibleMask), 4);
+        emfFile.read(reinterpret_cast<char *>(&emfPixelFmt->dwDamageMask), 4);
+       
+        emfPixelFmt->dwFlags = ExtractEMFFlags (flags);
+        emfPixelFmt->iPixelType = ExtractEMFPixelType (pixelType);
+
+        emfFile.seekg(currentPos, ios::beg); 
+    }
+
+    return emfPixelFmt;
+}
+
+// Taken from [MS-EMF] section 2.22 PixelFormatDescription Object
+
+PFFlags ExtractEMFFlags(const int flags) {
+    PFFlags returnFlags;
+
+    returnFlags.PFD_NEED_PALETTE    = flags & 0x00000001;  // bit 1 (P)
+    returnFlags.PFD_GENERIC_FORMAT  = flags & 0x00000002;  // bit 2 (F)
+    returnFlags.PFD_SUPPORT_OPENGL  = flags & 0x00000004;  // bit 3 (SO)
+    returnFlags.PFD_SUPPORT_GDI     = flags & 0x00000008;  // bit 4 (G)
+    returnFlags.PFD_DRAW_TO_BITMAP  = flags & 0x00000010;  // bit 5 (M)
+    returnFlags.PFD_DRAW_TO_WINDOW  = flags & 0x00000020;  // bit 6 (W)
+    returnFlags.PFD_STEREO          = flags & 0x00000040;  // bit 7 (S)
+    returnFlags.PFD_DOUBLEBUFFER    = flags & 0x00000080;  // bit 8 (D)
+    returnFlags.PFD_SUPPORT_COMPOSITION 
+                                    = flags & 0x00000100;  // bit 9 (C)
+    returnFlags.PFD_DIRECT3D_ACCELERATED 
+                                    = flags & 0x00000200;  // bit 10 (DA)
+    returnFlags.PFD_SUPPORT_DIRECTDRAW 
+                                    = flags & 0x00000400;  // bit 11 (DS)
+    returnFlags.PFD_GENERIC_ACCELERATED
+                                    = flags & 0x00000800;  // bit 12 (A)
+    returnFlags.PFD_SWAP_LAYER_BUFFERS
+                                    = flags & 0x00001000;  // bit 13 (SL)
+    returnFlags.PFD_SWAP_COPY       = flags & 0x00002000;  // bit 14 (SC)
+    returnFlags.PFD_SWAP_EXCHANGE   = flags & 0x00004000;  // bit 15 (SE)
+    returnFlags.PFD_NEED_SYSTEM_PALETTE
+                                    = flags & 0x00008000;  // bit 16 (SP)
+    // bits 17 to 28 are 0
+    returnFlags.PFD_STEREO_DONTCARE = flags & 0x10000000;  // bit 29 (SD)
+    returnFlags.PFD_DOUBLEBUFFER_DONTCARE
+                                    = flags & 0x20000000;  // bit 30 (DD)
+    returnFlags.PFD_DEPTH_DONTCARE  = flags & 0x40000000;  // bit 31 (DP)
+    // bit 32 is 0
+
+    if (returnFlags.PFD_SUPPORT_GDI && returnFlags.PFD_DOUBLEBUFFER) {
+        cerr << "PFD_SUPPORT_GDI and PFD_DOUBLE_BUFFER must "
+             << "NOT both be set!" << endl;
+    }
+
+    return returnFlags;
+}
+
+PFPixelType ExtractEMFPixelType (const int pixelType) {
+    PFPixelType returnPixelType;
+
+    switch (pixelType) {
+        case 0x00:
+            returnPixelType = PFD_TYPE_RGBA;
+            break;
+        case 0x01:
+            returnPixelType = PFD_TYPE_COLORINDEX;
+            break;
+        default:
+            cerr << "Pixel type is not valid!" << endl;
+    }
+
+    return returnPixelType;
+}
