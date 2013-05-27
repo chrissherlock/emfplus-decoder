@@ -182,7 +182,7 @@ std::ostream& operator << (std::ostream& s, PixelFormatDescriptor& pxlFmtDesc) {
     return s;
 }
 
-void ProcessEMFHeader(ifstream &emfFile)
+Header* ProcessEMFHeader(ifstream &emfFile)
 {
     Header header;
 
@@ -207,11 +207,11 @@ void ProcessEMFHeader(ifstream &emfFile)
     // Else if  size == 108 -> EmfMetafileHeaderExtension2
     // Else     not a valid size, possibly corrupted metafile
 
-    EmfMetafileHeader *emfHeader;
+    EmfMetafileHeader     *emfHeader;
     EmfMetafileHeaderExt1 *emfHeaderExt1;
     EmfMetafileHeaderExt2 *emfHeaderExt2;
     EmfMetafileHeaderDesc *emfDesc;
-    PixelFormatDescriptor  *emfPxlFmtDesc;
+    PixelFormatDescriptor *emfPxlFmtDesc;
 
     switch (header.size) {
         case 88:
@@ -317,6 +317,11 @@ void ProcessEMFHeader(ifstream &emfFile)
     cout << "Header size is " << HeaderSize << "." << endl;
     cout << "Record type for header is " << *headerType << endl << endl;
     cout << header << endl;
+
+
+    Header *retHdr = &header;
+
+    return retHdr;
 }
 
 EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
