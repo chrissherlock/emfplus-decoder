@@ -84,8 +84,8 @@ typedef struct {
     unsigned int    version;
     unsigned int    bytes;
     unsigned int    records;
-    unsigned int    handles;
-    unsigned int    reserved;
+    unsigned short  handles;
+    unsigned short  reserved;
     unsigned int    nDescription;
     unsigned int    offDescription;
     unsigned int    nPalEntries;

@@ -369,8 +369,8 @@ EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
              << " and the size of the file is " << fileSize << ".";
     }
 
-    emfFile.read(reinterpret_cast<char *>(&emfHeader->handles), 4);
-    emfFile.read(reinterpret_cast<char *>(&emfHeader->reserved), 4);
+    emfFile.read(reinterpret_cast<char *>(&emfHeader->handles), 2);
+    emfFile.read(reinterpret_cast<char *>(&emfHeader->reserved), 2);
 
     // note: this MUST be 0x0000 and according to Microsoft it MUST be
     // ignored... however, this makes a nice check to see if there is
@@ -413,7 +413,7 @@ EmfMetafileHeaderExt2* ProcessMetafileHeaderExt2(ifstream &emfFile) {
 
     emfFile.read(reinterpret_cast<char *>(&emfHeaderExt2->microMetersX), 4);
     emfFile.read(reinterpret_cast<char *>(&emfHeaderExt2->microMetersY), 4);
-
+    
     return emfHeaderExt2;
 }
 
