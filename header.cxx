@@ -2,37 +2,9 @@
 #include <fstream>
 #include <cwchar>
 
-#include "emfheader.hxx"
+#include "header.hxx"
 
 using namespace std;
-
-// forward declarations
-void ProcessEMFHeader(ifstream&);
-EmfMetafileHeader*       ProcessMetafileHeader(ifstream&);
-EmfMetafileHeaderExt1*   ProcessMetafileHeaderExt1(ifstream&);
-EmfMetafileHeaderExt2*   ProcessMetafileHeaderExt2(ifstream&);
-EmfMetafileHeaderDesc*   ProcessMetafileHeaderDesc(ifstream&, int, int);
-PixelFormatDescriptor*   ProcessMetafileHeaderPixelFormat(ifstream&, int, int);
-
-PFFlags ExtractEMFFlags(const int); 
-PFPixelType ExtractEMFPixelType (const int);
-
-std::ostream& operator << (std::ostream&, Header&); 
-
-int main () {
-    ifstream emfFile;
-    emfFile.open("image5.emf", ios::binary);
-    
-    ProcessEMFHeader(emfFile);
-    return 0;
-}
-
-// forward declarations of redirect operators
-std::ostream& operator << (std::ostream&, EmfMetafileHeader&);
-std::ostream& operator << (std::ostream&, EmfMetafileHeaderExt1&);
-std::ostream& operator << (std::ostream&, EmfMetafileHeaderExt2&);
-std::ostream& operator << (std::ostream&, EmfMetafileHeaderDesc&);
-std::ostream& operator << (std::ostream&, PixelFormatDescriptor&);
 
 std::ostream& operator << (std::ostream &s, Header &header) {
     std::ios_base::fmtflags basefield = s.basefield;
@@ -542,7 +514,7 @@ PFFlags ExtractEMFFlags(const int flags) {
     // bit 32 is 0
 
     if (returnFlags.PFD_SUPPORT_GDI && returnFlags.PFD_DOUBLEBUFFER) {
-        cerr << "PFD_SUPPORT_GDI and PFD_DOUBLEBUFFER must "
+        cerr << "PFD_SUPPORT_GDI and PFD_DOUBLE_BUFFER must "
              << "NOT both be set!" << endl;
     }
 

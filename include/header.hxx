@@ -1,7 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <cwchar>
-#include <string>
+#include "defs.hxx"
 
 #ifndef EMFHEADER
 #define EMFHEADER
@@ -296,7 +293,6 @@ typedef struct {
     int             dwDamageMask;
 } PixelFormatDescriptor;  
 
-
 typedef struct {
     unsigned int           type;
     unsigned int           size;
@@ -306,5 +302,25 @@ typedef struct {
     EmfMetafileHeaderDesc *headerDesc;
     PixelFormatDescriptor *headerPxlFmtDesc;
 } Header;
+
+// forward declarations
+void ProcessEMFHeader(ifstream&);
+EmfMetafileHeader*       ProcessMetafileHeader(ifstream&);
+EmfMetafileHeaderExt1*   ProcessMetafileHeaderExt1(ifstream&);
+EmfMetafileHeaderExt2*   ProcessMetafileHeaderExt2(ifstream&);
+EmfMetafileHeaderDesc*   ProcessMetafileHeaderDesc(ifstream&, int, int);
+PixelFormatDescriptor*   ProcessMetafileHeaderPixelFormat(ifstream&, int, int);
+
+PFFlags ExtractEMFFlags(const int); 
+PFPixelType ExtractEMFPixelType (const int);
+
+std::ostream& operator << (std::ostream&, Header&); 
+
+// forward declarations of redirect operators
+std::ostream& operator << (std::ostream&, EmfMetafileHeader&);
+std::ostream& operator << (std::ostream&, EmfMetafileHeaderExt1&);
+std::ostream& operator << (std::ostream&, EmfMetafileHeaderExt2&);
+std::ostream& operator << (std::ostream&, EmfMetafileHeaderDesc&);
+std::ostream& operator << (std::ostream&, PixelFormatDescriptor&);
 
 #endif
