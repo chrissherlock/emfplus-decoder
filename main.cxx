@@ -8,7 +8,7 @@ using namespace std;
 
 int main () {
     ifstream emfFile;
-    emfFile.open("image5.emf", ios::binary);
+    emfFile.open("test/image5.emf", ios::binary);
     
     ProcessEMFHeader(emfFile);
     return 0;
