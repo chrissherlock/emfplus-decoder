@@ -21,7 +21,7 @@ Header* ProcessEMFHeader(ifstream &emfFile)
 
     if (header.type != EMR_HEADER) {
         cerr << "Header RecordType is not EMR_HEADER! It is " 
-             << header.type;
+             << header.type << endl; 
     }
 
     emfFile.read(reinterpret_cast<char *>(&header.size), 4);
@@ -41,7 +41,7 @@ Header* ProcessEMFHeader(ifstream &emfFile)
 
     if (header.size < 88) {
         cerr << "Header size less than 88 bytes - possible file "
-                "corruption!";
+                "corruption!" << endl;
     } else {
         HeaderSize=header.size;
 
