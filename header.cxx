@@ -86,7 +86,7 @@ Header* ProcessEMFHeader(ifstream &emfFile)
                     }
                 } else {
                     cerr << "Invalid pixel format size! This may "
-                            "indicate the EMF file is corrupted";
+                            "indicate the EMF file is corrupted" << endl;
                 }
             }
         }
