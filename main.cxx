@@ -13,13 +13,13 @@ int main () {
     // TODO command line options needed to point to a different file
     emfFile.open("test/image5.emf", ios::binary);
     
-    Header *header;
+    Header header;
 
-    header = ProcessEMFHeader(emfFile);
+    header = *(ProcessEMFHeader(emfFile));
 
     cout << header << endl;
 
-    ReadRecords(emfFile, header->header->records);
+    ReadRecords(emfFile, header.header->records);
 
     return 0;
 }

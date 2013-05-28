@@ -26,22 +26,13 @@ Header* ProcessEMFHeader(ifstream &emfFile)
 
     emfFile.read(reinterpret_cast<char *>(&header.size), 4);
     
-    // Detect what sort of header extension is being used
-    // If       size == 88  -> EmfMetafileHeader
-    // Else if  size == 100 -> EmfMetafileHeaderExtension1
-    // Else if  size == 108 -> EmfMetafileHeaderExtension2
-    // Else     not a valid size, possibly corrupted metafile
-
     EmfMetafileHeader     *emfHeader;
     EmfMetafileHeaderExt1 *emfHeaderExt1;
     EmfMetafileHeaderExt2 *emfHeaderExt2;
     EmfMetafileHeaderDesc *emfDesc;
     PixelFormatDescriptor *emfPxlFmtDesc;
 
-    header.header=emfHeader;
-    header.headerExt1=emfHeaderExt1;
-    header.headerExt2=emfHeaderExt2;
-    header.headerDesc=emfDesc;
+    emfHeader = ProcessMetafileHeader(emfFile);
 
     // process header size based on algorithm as described in [MS-EMF]
     // section 2.3.4.2 EMR_HEADER Record Types
@@ -106,7 +97,6 @@ Header* ProcessEMFHeader(ifstream &emfFile)
     if (HeaderSize >= 108) {
         headerType = new string("EmfMetafileHeaderExtension2");
 
-        emfHeader = ProcessMetafileHeader(emfFile);
         emfHeaderExt1 = ProcessMetafileHeaderExt1(emfFile);
         emfHeaderExt2 = ProcessMetafileHeaderExt2(emfFile);
         emfDesc = ProcessMetafileHeaderDesc(emfFile, 
@@ -119,7 +109,6 @@ Header* ProcessEMFHeader(ifstream &emfFile)
 
         headerType = new string("EmfMetafileHeaderExtension1");
         
-        emfHeader = ProcessMetafileHeader(emfFile);
         emfHeaderExt1 = ProcessMetafileHeaderExt1(emfFile);
         emfDesc = ProcessMetafileHeaderDesc(emfFile, 
         emfHeader->offDescription, emfHeader->nDescription);
@@ -128,13 +117,18 @@ Header* ProcessEMFHeader(ifstream &emfFile)
 
         headerType = new string("EmfMetafileHeader");
 
-        emfHeader = ProcessMetafileHeader(emfFile);
         emfDesc = ProcessMetafileHeaderDesc(emfFile, 
         emfHeader->offDescription, emfHeader->nDescription);
 
     } else {    // this should NOT be possible!
         headerType = new string("invalid!");
     }
+
+    header.header=emfHeader;
+    header.headerExt1=emfHeaderExt1;
+    header.headerExt2=emfHeaderExt2;
+    header.headerDesc=emfDesc;
+    header.headerPxlFmtDesc=emfPxlFmtDesc;
 
     cout << "Header size is " << HeaderSize << "." << endl;
     cout << "Record type for header is " << *headerType << endl << endl;
@@ -176,7 +170,7 @@ EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
         cerr << "Record signature not valid in header! Should be "
              << "0x464D4520 (\"EMF \") but it is " 
              << std::hex << std::showbase 
-                << emfHeader->recordSignature;
+                << emfHeader->recordSignature << endl;
     }
 
     emfFile.read(reinterpret_cast<char *>(&emfHeader->version), 4);
@@ -186,7 +180,7 @@ EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
     if (emfHeader->bytes != fileSize) {
         cerr << "Header bytes field is not the same as the filesize! "
              << "bytes field is " << emfHeader->bytes 
-             << " and the size of the file is " << fileSize << ".";
+             << " and the size of the file is " << fileSize << "." << endl;
     }
 
     emfFile.read(reinterpret_cast<char *>(&emfHeader->handles), 2);
@@ -198,7 +192,7 @@ EmfMetafileHeader* ProcessMetafileHeader(ifstream &emfFile) {
 
     if (emfHeader->reserved != 0x0000) {
         cerr << "Reserved field MUST be 0x0000, but is actually "
-             << std::hex << std::showbase << emfHeader->reserved;
+             << std::hex << std::showbase << emfHeader->reserved << endl;
     }
 
     emfFile.read(reinterpret_cast<char *>(&emfHeader->nDescription), 4);
