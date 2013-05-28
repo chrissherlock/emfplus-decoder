@@ -38,32 +38,6 @@ Header* ProcessEMFHeader(ifstream &emfFile)
     EmfMetafileHeaderDesc *emfDesc;
     PixelFormatDescriptor *emfPxlFmtDesc;
 
-    switch (header.size) {
-        case 88:
-            emfHeader = ProcessMetafileHeader(emfFile);
-            emfDesc = ProcessMetafileHeaderDesc(emfFile, 
-                        emfHeader->offDescription, emfHeader->nDescription);
-            break;
-        case 100:
-            emfHeader = ProcessMetafileHeader(emfFile);
-            emfHeaderExt1 = ProcessMetafileHeaderExt1(emfFile);
-            emfDesc = ProcessMetafileHeaderDesc(emfFile, 
-                        emfHeader->offDescription, emfHeader->nDescription);
-            break;
-        case 108:
-            emfHeader = ProcessMetafileHeader(emfFile);
-            emfHeaderExt1 = ProcessMetafileHeaderExt1(emfFile);
-            emfHeaderExt2 = ProcessMetafileHeaderExt2(emfFile);
-            emfDesc = ProcessMetafileHeaderDesc(emfFile, 
-                        emfHeader->offDescription, emfHeader->nDescription);
-            emfPxlFmtDesc = ProcessMetafileHeaderPixelFormat(emfFile,
-                        emfHeaderExt1->offPixelFormat, 
-                        emfHeaderExt1->cbPixelFormat);
-            break;
-        default:
-            break;
-    }
-
     header.header=emfHeader;
     header.headerExt1=emfHeaderExt1;
     header.headerExt2=emfHeaderExt2;
@@ -131,18 +105,39 @@ Header* ProcessEMFHeader(ifstream &emfFile)
 
     if (HeaderSize >= 108) {
         headerType = new string("EmfMetafileHeaderExtension2");
+
+        emfHeader = ProcessMetafileHeader(emfFile);
+        emfHeaderExt1 = ProcessMetafileHeaderExt1(emfFile);
+        emfHeaderExt2 = ProcessMetafileHeaderExt2(emfFile);
+        emfDesc = ProcessMetafileHeaderDesc(emfFile, 
+                    emfHeader->offDescription, emfHeader->nDescription);
+        emfPxlFmtDesc = ProcessMetafileHeaderPixelFormat(emfFile,
+                    emfHeaderExt1->offPixelFormat, 
+                    emfHeaderExt1->cbPixelFormat);
+
     } else if (HeaderSize >= 100) {
+
         headerType = new string("EmfMetafileHeaderExtension1");
+        
+        emfHeader = ProcessMetafileHeader(emfFile);
+        emfHeaderExt1 = ProcessMetafileHeaderExt1(emfFile);
+        emfDesc = ProcessMetafileHeaderDesc(emfFile, 
+        emfHeader->offDescription, emfHeader->nDescription);
+
     } else if (HeaderSize == 88) {
+
         headerType = new string("EmfMetafileHeader");
+
+        emfHeader = ProcessMetafileHeader(emfFile);
+        emfDesc = ProcessMetafileHeaderDesc(emfFile, 
+        emfHeader->offDescription, emfHeader->nDescription);
+
     } else {    // this should NOT be possible!
         headerType = new string("invalid!");
     }
 
     cout << "Header size is " << HeaderSize << "." << endl;
     cout << "Record type for header is " << *headerType << endl << endl;
-    cout << header << endl;
-
 
     Header *retHdr = &header;
 

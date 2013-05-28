@@ -3,6 +3,7 @@
 #include <cwchar>
 
 #include "header.hxx"
+#include "header_output.hxx"
 #include "record.hxx"
 
 using namespace std;
@@ -15,6 +16,9 @@ int main () {
     Header *header;
 
     header = ProcessEMFHeader(emfFile);
+
+    cout << header << endl;
+
     ReadRecords(emfFile, header->header->records);
 
     return 0;
