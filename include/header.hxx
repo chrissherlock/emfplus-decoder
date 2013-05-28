@@ -165,4 +165,15 @@ typedef struct {
     PixelFormatDescriptor *headerPxlFmtDesc;
 } Header;
 
+
+Header*                  ProcessEMFHeader(ifstream&);
+EmfMetafileHeader*       ProcessMetafileHeader(ifstream&);
+EmfMetafileHeaderExt1*   ProcessMetafileHeaderExt1(ifstream&);
+EmfMetafileHeaderExt2*   ProcessMetafileHeaderExt2(ifstream&);
+EmfMetafileHeaderDesc*   ProcessMetafileHeaderDesc(ifstream&, int, int);
+PixelFormatDescriptor*   ProcessMetafileHeaderPixelFormat(ifstream&, int, int);
+
+PFFlags ExtractEMFFlags(const int); 
+PFPixelType ExtractEMFPixelType (const int);
+
 #endif
