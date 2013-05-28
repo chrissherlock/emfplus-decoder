@@ -3,6 +3,7 @@
 #include <cwchar>
 
 #include "header.hxx"
+#include "header_output.hxx"
 
 using namespace std;
 
