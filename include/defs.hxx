@@ -130,4 +130,8 @@ using namespace std;
 #define EMR_COLORMATCHTOTARGETW     0x00000079
 #define EMR_CREATECOLORSPACEW       0x0000007A
 
+#define EMR_COMMENT_EMFSPOOL        0x00000000
+#define EMR_COMMENT_EMFPLUS         0x2B464D45
+#define EMR_COMMENT_PUBLIC          0x43494447
+
 #endif
