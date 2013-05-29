@@ -66,7 +66,7 @@ using namespace std;
 
 */
 
-typedef struct {
+struct EmfMetafileHeader {
     RectL           *bounds;
     RectL           *frame;
     unsigned int    recordSignature;
@@ -80,26 +80,26 @@ typedef struct {
     unsigned int    nPalEntries;
     SizeL           *device;
     SizeL           *millimeters;
-} EmfMetafileHeader;
+};
 
-typedef struct {
+struct EmfMetafileHeaderExt1 {
     unsigned int    cbPixelFormat;
     unsigned int    offPixelFormat;
     unsigned int    bOpenGL;
-} EmfMetafileHeaderExt1;
+};
 
-typedef struct {
+struct EmfMetafileHeaderExt2 {
     unsigned int    microMetersX;
     unsigned int    microMetersY;
-} EmfMetafileHeaderExt2;
+};
 
 typedef basic_string<wchar_t> UTF_16LE;
 
-typedef struct {
+struct EmfMetafileHeaderDesc {
     UTF_16LE        *description;
-} EmfMetafileHeaderDesc;
+};
 
-typedef struct {
+struct PFFlags {
     unsigned PFD_DOUBLEBUFFER           : 1;
     unsigned PFD_STEREO                 : 1;
     unsigned PFD_DRAW_TO_WINDOW         : 1;
@@ -119,14 +119,14 @@ typedef struct {
     unsigned PFD_DEPTH_DONTCARE         : 1;
     unsigned PFD_DOUBLEBUFFER_DONTCARE  : 1;
     unsigned PFD_STEREO_DONTCARE        : 1;
-} PFFlags; 
+}; 
 
-typedef enum {
+enum PFPixelType {
     PFD_TYPE_RGBA = 0x00,
     PFD_TYPE_COLORINDEX = 0x01
-} PFPixelType;
+};
 
-typedef struct {
+struct PixelFormatDescriptor {
     unsigned short  nSize;
     unsigned short  nVersion;
     PFFlags         dwFlags;
@@ -153,9 +153,9 @@ typedef struct {
     int             dwLayerMask;
     int             dwVisibleMask;
     int             dwDamageMask;
-} PixelFormatDescriptor;  
+};  
 
-typedef struct {
+struct Header {
     unsigned int           type;
     unsigned int           size;
     EmfMetafileHeader     *header;
@@ -163,7 +163,7 @@ typedef struct {
     EmfMetafileHeaderExt2 *headerExt2;
     EmfMetafileHeaderDesc *headerDesc;
     PixelFormatDescriptor *headerPxlFmtDesc;
-} Header;
+};
 
 
 Header*                  ProcessEMFHeader(ifstream&);
