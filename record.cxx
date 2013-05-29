@@ -9,7 +9,7 @@ using namespace std;
 
 EmfRecords ReadRecords(ifstream &emfFile, unsigned int numRecords) {
 
-    EmfRecords records(numRecords+1);
+    EmfRecords records(numRecords);
 
     for (int i=0; i < numRecords; i++) {
         EmfRecord record;
@@ -259,6 +259,7 @@ int isStateRecord(unsigned int type) {
         case EMR_MOVETOEX:
         case EMR_PIXELFORMAT:
         case EMR_RESTOREDC:
+        case EMR_SAVEDC:
         case EMR_SCALEVIEWPORTEXTEX:
         case EMR_SCALEWINDOWEXTEX:
         case EMR_SETARCDIRECTION:
