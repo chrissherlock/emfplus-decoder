@@ -1,7 +1,7 @@
 CC          = g++
 DEBUG       = -g
 CXXFILES    = main.cxx $(HEADERFILES) $(PRINTFILES)
-HEADERFILES = header.cxx record.cxx
+HEADERFILES = header.cxx emfrecord.cxx
 PRINTFILES  = header_output.cxx
 INCLUDE     = include
 EXECUTABLE  = emfplus_decode

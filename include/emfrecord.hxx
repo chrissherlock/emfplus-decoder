@@ -1,39 +1,35 @@
+#include <vector>
 #include <fstream>
-#include "emfplus_record.hxx"
-#include "emfspool_record.hxx"
-#include "emfpubcomm_record.hxx"
 
-#ifndef EMFCOMMENTRECORD
-#define EMFCOMMENTRECORD
+#ifndef EMFRECORD
+#define EMFRECORD
 
-#define EMR_COMMENT_EMFSPOOL            0x00000000
-#define EMR_COMMENT_EMFPLUS             0x2B464D45
-#define EMR_COMMENT_PUBLIC              0x43494447
+using namespace std;
 
-#define EMF_SPOOLFONTDEFINITION         0x544F4E46
-
-struct EmfCommentRecord : EmfRecord {
-    int dataSize;
-    int commentIdentifier;
+struct EmfRecord {
+    unsigned int type;
+    string       typeName;
+    unsigned int size;
 };
 
-struct EmrComment : EmfCommentRecord {
-    int commentRecordParm;
-    char *privateData;
-};
+typedef vector<EmfRecord> EmfRecords;
 
-struct EmrCommentEMFPlus : EmfCommentRecord {
-    EmfPlusRecord *records;
-};
+EmfRecords ReadRecords(ifstream&, unsigned int);
 
-struct EmrCommentEMFSpool : EmfCommentRecord {
-    int emfSpoolRecordIdentifier;
-    EmfSpoolRecord *records;
-};
+EmfRecord ReadBitmap(ifstream& const EmfRecord&);
+EmfRecord ReadBitBltRecord(ifstream& const EmfRecord&);
 
-struct  EmrCommentPublic : EmfCommentRecord {
-    int publicCommentIdentifier;
-    EmfPublicCommentRecord *records;
-};
+int isBitmapRecord(unsigned int);
+int isClippingRecord(unsigned int);
+int isCommentRecord(unsigned int);
+int isControlRecord(unsigned int);
+int isDrawingRecord(unsigned int);
+int isEscapeRecord(unsigned int);
+int isObjectCreationRecord(unsigned int);
+int isObjectManipulationRecord(unsigned int);
+int isOpenGLRecord(unsigned int);
+int isPathBracketRecord(unsigned int);
+int isStateRecord(unsigned int);
+int isTransformRecord(unsigned int);
 
 #endif
