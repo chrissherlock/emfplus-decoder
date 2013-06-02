@@ -1,4 +1,4 @@
-CC          = clang++
+CC          = g++
 DEBUG       = -g
 CXXFILES    = main.cxx $(EMFHDRFILES) $(PRINTFILES) $(EMFRECORDS)
 EMFHDRFILES = header.cxx emfrecord.cxx
