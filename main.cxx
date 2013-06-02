@@ -5,7 +5,6 @@
 
 #include "header.hxx"
 #include "header_output.hxx"
-#include "record.hxx"
 #include "emfrecord.hxx"
 
 using namespace std;

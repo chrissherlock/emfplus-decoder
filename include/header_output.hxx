@@ -1,10 +1,9 @@
+#include <fstream>
 #include "defs.hxx"
 #include "header.hxx"
 
 #ifndef EMFHEADER_OUTPUT
 #define EMFHEADER_OUTPUT
-
-using namespace std;
 
 std::ostream& operator << (std::ostream&, Header&); 
 std::ostream& operator << (std::ostream&, EmfMetafileHeader&);

@@ -11,7 +11,7 @@ struct XForm {
     float M22;
     float Dx;
     float Dy;
-}
+};
 
 // defined in [MS-EMF] 2.1.9 DIBColors Enumeration
 

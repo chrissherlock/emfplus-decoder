@@ -4,20 +4,18 @@
 #ifndef EMFRECORD
 #define EMFRECORD
 
-using namespace std;
-
 struct EmfRecord {
     unsigned int type;
-    string       typeName;
+    std::string       typeName;
     unsigned int size;
 };
 
-typedef vector<EmfRecord> EmfRecords;
+typedef std::vector<EmfRecord> EmfRecords;
 
-EmfRecords ReadRecords(ifstream&, unsigned int);
+EmfRecords ReadRecords(std::ifstream&, unsigned int);
 
-EmfRecord ReadBitmap(ifstream& const EmfRecord&);
-EmfRecord ReadBitBltRecord(ifstream& const EmfRecord&);
+EmfRecord ReadBitmap(const std::ifstream&, EmfRecord&);
+EmfRecord ReadBitBltRecord(const std::ifstream&, EmfRecord&);
 
 int isBitmapRecord(unsigned int);
 int isClippingRecord(unsigned int);

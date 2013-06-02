@@ -16,7 +16,7 @@ struct SizeL {
 struct PointL {
     int x;
     int y;
-}
+};
 
 // defined in [MS-WMF] 2.2.2.8 ColorRef Object
 
@@ -25,6 +25,7 @@ struct ColorRef {
     unsigned int    Green;
     unsigned int    Blue;
     unsigned int    Reserved;
+};
 
 enum TernaryRasterOperation {
     BLACKNESS   = 0x00,
@@ -282,6 +283,6 @@ enum TernaryRasterOperation {
     PSDNOO      = 0xFD,
     DPSOO       = 0xFE,
     WHITENESS   = 0xFF
-}
+};
     
 #endif

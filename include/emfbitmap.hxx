@@ -5,16 +5,20 @@
 #include "objects.hxx"
 #include "wmf.hxx"
 
-using namespace std;
-
 #ifndef EMFBITMAP
 #define EMFBITMAP
 
 // AlphaFormat field EMR_ALPHABLEND
 #define AC_SRC_ALPHA 0x01   
 
-EmfRecord *ReadBitmap(ifstream&, const EmfRecord&); 
-EmfRecord *ReadBitBltRecord(ifstream&, const EmfRecord&);
+EmfRecord *ReadBitmap(std::ifstream&, const EmfRecord&); 
+EmfRecord *ReadBitBltRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadMaskBltRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadPlgBltRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadDIBBitsToDeviceRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadDIBBitsRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadAlphaBlendRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadTransparentBltRecord(std::ifstream&, const EmfRecord&);
 
 // [MS-EMF] section 2.3.1.2 EMR_BITBLT
 
@@ -36,7 +40,7 @@ struct EmfBitBltBitmap : EmfRecord {
     unsigned int    cbBitsSrc;
     char            *BmiSrc;
     char            *BitsSrc;
-}
+};
 
 struct EmfStretchBlt : EmfRecord {
     RectL           *Bounds;
@@ -55,7 +59,7 @@ struct EmfStretchBlt : EmfRecord {
     unsigned int    offBitsSrc;
     unsigned int    cbBitsSrc;
     char            *BmiSrc;
-}
+};
 
 struct EmfMaskBlt : EmfRecord {
     RectL           *Bounds;
@@ -88,7 +92,7 @@ struct EmfMaskBlt : EmfRecord {
     char            *BitsSrc;
     char            *BmiMask;
     char            *BitsMask;
-}
+};
 
 struct EmfPlgBlt : EmfRecord {
     RectL           *Bounds;
@@ -115,7 +119,7 @@ struct EmfPlgBlt : EmfRecord {
     char            *BitsSrc;
     char            *BmiMask;
     char            *BitsMask;
-}
+};
 
 struct EmfSetDIBBitsToDevice : EmfRecord {
     RectL           *Bounds;
@@ -134,7 +138,7 @@ struct EmfSetDIBBitsToDevice : EmfRecord {
     unsigned int    cScans;
     char            *BmiSrc;
     char            *BitsSrc;
-}
+};
 
 struct EmfStretchDIBBits : EmfRecord {
     RectL           *Bounds;
@@ -154,7 +158,7 @@ struct EmfStretchDIBBits : EmfRecord {
     int             cyDest;
     char            *BmiSrc;
     char            *BitsSrc;
-}
+};
 
 struct EmfAlphaBlend : EmfRecord {
     RectL           *Bounds;
@@ -181,7 +185,7 @@ struct EmfAlphaBlend : EmfRecord {
     int             cySrc;
     char            *BmiSrc;
     char            *BitsSrc;
-}
+};
 
 struct EmfTransparentBlt : EmfRecord {
     RectL           *Bounds;
@@ -203,6 +207,6 @@ struct EmfTransparentBlt : EmfRecord {
     int             cySrc;
     char            *BmiSrc;
     char            *BitsSrc;
-}
+};
 
 #endif

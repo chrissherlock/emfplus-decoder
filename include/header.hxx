@@ -1,10 +1,10 @@
+#include <fstream>
+
 #include "defs.hxx"
 #include "wmf.hxx"
 
 #ifndef EMFHEADER
 #define EMFHEADER
-
-using namespace std;
 
 /* structure of an EMF file's header record is:
     Type                        (unsigned int   - 4 bytes)
@@ -166,12 +166,12 @@ struct Header {
 };
 
 
-Header*                  ProcessEMFHeader(ifstream&);
-EmfMetafileHeader*       ProcessMetafileHeader(ifstream&);
-EmfMetafileHeaderExt1*   ProcessMetafileHeaderExt1(ifstream&);
-EmfMetafileHeaderExt2*   ProcessMetafileHeaderExt2(ifstream&);
-EmfMetafileHeaderDesc*   ProcessMetafileHeaderDesc(ifstream&, int, int);
-PixelFormatDescriptor*   ProcessMetafileHeaderPixelFormat(ifstream&, int, int);
+Header*                  ProcessEMFHeader(std::ifstream&);
+EmfMetafileHeader*       ProcessMetafileHeader(std::ifstream&);
+EmfMetafileHeaderExt1*   ProcessMetafileHeaderExt1(std::ifstream&);
+EmfMetafileHeaderExt2*   ProcessMetafileHeaderExt2(std::ifstream&);
+EmfMetafileHeaderDesc*   ProcessMetafileHeaderDesc(std::ifstream&, int, int);
+PixelFormatDescriptor*   ProcessMetafileHeaderPixelFormat(std::ifstream&, int, int);
 
 PFFlags ExtractEMFFlags(const int); 
 PFPixelType ExtractEMFPixelType (const int);
