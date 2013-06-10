@@ -59,7 +59,6 @@ struct EmfSelectClipPath : EmfRecord {
     unsigned int    RegionMode;
 };
 
-EmfRecord *ReadClipping(std::ifstream&, const EmfRecord&); 
 EmfRecord *ReadExcludeClipRecord(std::ifstream&, const EmfRecord&); 
 EmfRecord *ReadExtSelectClipRgnRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadIntersectClipRectRecord(std::ifstream&, const EmfRecord&);

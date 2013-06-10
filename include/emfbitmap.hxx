@@ -11,7 +11,6 @@
 // AlphaFormat field EMR_ALPHABLEND
 #define AC_SRC_ALPHA 0x01   
 
-EmfRecord *ReadBitmap(std::ifstream&, const EmfRecord&); 
 EmfRecord *ReadBitBltRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadStretchBltRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadMaskBltRecord(std::ifstream&, const EmfRecord&);
@@ -20,6 +19,19 @@ EmfRecord *ReadSetDIBitsToDeviceRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadStretchDIBitsRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadAlphaBlendRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadTransparentBltRecord(std::ifstream&, const EmfRecord&);
+
+int isBitmapRecord(unsigned int);
+int isClippingRecord(unsigned int);
+int isCommentRecord(unsigned int);
+int isControlRecord(unsigned int);
+int isDrawingRecord(unsigned int);
+int isEscapeRecord(unsigned int);
+int isObjectCreationRecord(unsigned int);
+int isObjectManipulationRecord(unsigned int);
+int isOpenGLRecord(unsigned int);
+int isPathBracketRecord(unsigned int);
+int isStateRecord(unsigned int);
+int isTransformRecord(unsigned int);
 
 // [MS-EMF] section 2.3.1.2 EMR_BITBLT
 
