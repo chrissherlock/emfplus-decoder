@@ -54,11 +54,17 @@ struct EmfOffsetClipRgn : EmfRecord {
     PointL          *Offset;
 };
 
+// defined in [MS-EMF] section 2.3.2.5 EMR_SELECTCLIPPATH Record
+struct EmfSelectClipPath : EmfRecord {
+    unsigned int    RegionMode;
+};
+
 EmfRecord *ReadClipping(std::ifstream&, const EmfRecord&); 
 EmfRecord *ReadExcludeClipRecord(std::ifstream&, const EmfRecord&); 
 EmfRecord *ReadExtSelectClipRgnRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadIntersectClipRectRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadOffsetClipRgnRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadSelectClipPathRecord(std::ifstream&, const EmfRecord&);
     
 RegionDataHeader *ReadRegionDataHeader(std::ifstream&);
 RegionData       *ReadRegionData(std::ifstream&);

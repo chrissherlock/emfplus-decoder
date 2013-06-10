@@ -127,3 +127,12 @@ EmfRecord *ReadOffsetClipRgnRecord(ifstream &emfFile, const EmfRecord &record) {
     EmfOffsetClipRgn *retVal = &offsetClipRgnRecord;
     return retVal;
 }
+
+EmfRecord *ReadSelectClipPathRecord(ifstream &emfFile, const EmfRecord &record) {
+    EmfSelectClipPath selectClipPathRecord;
+
+    emfFile.read(reinterpret_cast<char *>(selectClipPathRecord.RegionMode), 4);
+
+    EmfSelectClipPath *retVal = &selectClipPathRecord;
+    return retVal;
+}
