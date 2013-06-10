@@ -13,16 +13,17 @@
 
 EmfRecord *ReadBitmap(std::ifstream&, const EmfRecord&); 
 EmfRecord *ReadBitBltRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadStretchBltRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadMaskBltRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadPlgBltRecord(std::ifstream&, const EmfRecord&);
-EmfRecord *ReadDIBBitsToDeviceRecord(std::ifstream&, const EmfRecord&);
-EmfRecord *ReadDIBBitsRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadSetDIBitsToDeviceRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadStretchDIBitsRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadAlphaBlendRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadTransparentBltRecord(std::ifstream&, const EmfRecord&);
 
 // [MS-EMF] section 2.3.1.2 EMR_BITBLT
 
-struct EmfBitBltBitmap : EmfRecord {
+struct EmfBitBlt : EmfRecord {
     RectL           *Bounds;
     int             xDest;
     int             yDest;
@@ -121,7 +122,7 @@ struct EmfPlgBlt : EmfRecord {
     char            *BitsMask;
 };
 
-struct EmfSetDIBBitsToDevice : EmfRecord {
+struct EmfSetDIBitsToDevice : EmfRecord {
     RectL           *Bounds;
     int             xDest;
     int             yDest;
@@ -140,7 +141,7 @@ struct EmfSetDIBBitsToDevice : EmfRecord {
     char            *BitsSrc;
 };
 
-struct EmfStretchDIBBits : EmfRecord {
+struct EmfStretchDIBits : EmfRecord {
     RectL           *Bounds;
     int             xDest;
     int             yDest;
@@ -193,7 +194,7 @@ struct EmfTransparentBlt : EmfRecord {
     int             yDest;
     int             cxDest;
     int             cyDest;
-    ColorRef        TransparentColor;
+    ColorRef        *TransparentColorSrc;
     int             xSrc;
     int             ySrc;
     XForm           *XformSrc;
