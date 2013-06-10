@@ -8,11 +8,6 @@
 #ifndef EMFCLIPPING
 #define EMFCLIPPING
 
-EmfRecord *ReadClipping(std::ifstream&, const EmfRecord&); 
-EmfRecord *ReadExcludeClipRecord(std::ifstream&, const EmfRecord&); 
-EmfRecord *ReadExtSelectClipRgnRecord(std::ifstream&, const EmfRecord&);
-
-
 // defined in [MS-EMF] section 2.1.29 RegionMode Enumeration
 enum RegionMode {
     RGN_AND  = 0x01,
@@ -37,7 +32,7 @@ struct RegionData : RegionDataHeader {
 };
 
 // defined in [MS-EMF] section 2.3.2.1 EMR_EXCLUDECLIPRECT Record
-struct EmfExcludeClipBitmap : EmfRecord {
+struct EmfExcludeClipRect : EmfRecord {
     RectL           *Clip;
 };
 
@@ -48,8 +43,18 @@ struct EmfExtSelectClipRgn : EmfRecord {
     RegionData      *RgnData;   // if RegionMode is RGN_COPY, 
                                 // should be NULL
 };
+
+// defined in [MS-EMF] section 2.3.2.4 EMR_OFFSETCLIPRGN Record
+struct EmfIntersectClipRect : EmfRecord {
+    RectL           *Clip;
+};
+
+EmfRecord *ReadClipping(std::ifstream&, const EmfRecord&); 
+EmfRecord *ReadExcludeClipRecord(std::ifstream&, const EmfRecord&); 
+EmfRecord *ReadExtSelectClipRgnRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadIntersectClipRectRecord(std::ifstream&, const EmfRecord&);
     
-RegionDataHeader ReadRegionDataHeader(std::ifstream&);
+RegionDataHeader *ReadRegionDataHeader(std::ifstream&);
 RegionData       *ReadRegionData(std::ifstream&);
 
 #endif

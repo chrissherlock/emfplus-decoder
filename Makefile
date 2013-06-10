@@ -1,7 +1,7 @@
-CC          = g++
+CC          = clang++
 DEBUG       = -g
 CXXFILES    = main.cxx $(EMFHDRFILES) $(PRINTFILES) $(EMFRECORDS)
-EMFHDRFILES = header.cxx emfrecord.cxx
+EMFHDRFILES = header.cxx emfrecord.cxx emfclipping.cxx
 EMFRECORDS  = emfbitmap.cxx
 PRINTFILES  = header_output.cxx
 INCLUDE     = include
