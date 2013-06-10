@@ -10,12 +10,12 @@ struct EmfRecord {
     unsigned int size;
 };
 
-typedef std::vector<EmfRecord> EmfRecords;
+typedef std::vector<EmfRecord*> EmfRecords;
 
 EmfRecords ReadRecords(std::ifstream&, unsigned int);
 
-EmfRecord ReadBitmap(const std::ifstream&, EmfRecord&);
-EmfRecord ReadBitBltRecord(const std::ifstream&, EmfRecord&);
+EmfRecord *ReadBitmapRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadClippingRecord(std::ifstream&, const EmfRecord&);
 
 int isBitmapRecord(unsigned int);
 int isClippingRecord(unsigned int);

@@ -8,7 +8,7 @@
 
 using namespace std;
 
-EmfRecord *ReadClipping(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadClippingRecord(ifstream &emfFile, const EmfRecord &record) {
     EmfRecord *clippingRecord;
 
     switch (record.type) {
