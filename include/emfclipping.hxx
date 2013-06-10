@@ -36,7 +36,7 @@ struct EmfExcludeClipRect : EmfRecord {
     RectL           *Clip;
 };
 
-// defined in [MS-EMF] section 2.3.2.1 EMR_EXTSELECTCLIPRGN Record
+// defined in [MS-EMF] section 2.3.2.i2 EMR_EXTSELECTCLIPRGN Record
 struct EmfExtSelectClipRgn : EmfRecord {
     unsigned int    RgnDataSize;
     unsigned int    RegionMode;
@@ -44,15 +44,21 @@ struct EmfExtSelectClipRgn : EmfRecord {
                                 // should be NULL
 };
 
-// defined in [MS-EMF] section 2.3.2.4 EMR_OFFSETCLIPRGN Record
+// defined in [MS-EMF] section 2.3.2.3 EMR_INTERSECTCLIPRGN Record
 struct EmfIntersectClipRect : EmfRecord {
     RectL           *Clip;
+};
+
+// defined in [MS-EMF] section 2.3.2.4 EMR_OFFSETCLIPRGN Record
+struct EmfOffsetClipRgn : EmfRecord {
+    PointL          *Offset;
 };
 
 EmfRecord *ReadClipping(std::ifstream&, const EmfRecord&); 
 EmfRecord *ReadExcludeClipRecord(std::ifstream&, const EmfRecord&); 
 EmfRecord *ReadExtSelectClipRgnRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadIntersectClipRectRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadOffsetClipRgnRecord(std::ifstream&, const EmfRecord&);
     
 RegionDataHeader *ReadRegionDataHeader(std::ifstream&);
 RegionData       *ReadRegionData(std::ifstream&);
