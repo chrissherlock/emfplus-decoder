@@ -1,7 +1,4 @@
-#include <fstream>
-#include "emfplus_record.hxx"
-#include "emfspool_record.hxx"
-#include "emfpubcomm_record.hxx"
+#include "emfrecord.hxx"
 
 #ifndef EMFCOMMENTRECORD
 #define EMFCOMMENTRECORD

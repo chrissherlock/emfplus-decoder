@@ -1,15 +1,18 @@
-CC          = clang++
-DEBUG       = -g
-CXXFILES    = main.cxx $(EMFHDRFILES) $(PRINTFILES) $(EMFRECORDS)
-EMFHDRFILES = header.cxx emfrecord.cxx emfclipping.cxx
-EMFRECORDS  = emfbitmap.cxx
-PRINTFILES  = header_output.cxx
-INCLUDE     = include
+include Makefile.inc
+
+DIR         = ${CURDIR}
+BUILD       = ${DIR}/build
+SUBDIRS     = emf
 EXECUTABLE  = emfplus_decode
 
-build: $(CXXFILES)
-	$(CC) -o $(EXECUTABLE) $(CXXFILES) -I$(INCLUDE) $(DEBUG)
+export BUILD
+
+.PHONY: build ${SUBDIRS}
+
+build: $(SUBDIRS)
+
+$(SUBDIRS):
+	$(MAKE) -C $@
 
 clean:
-	rm -f *.o core $(EXECUTABLE)
-	touch $(CXXFILES)
+	rm -f ${BUILD}/*
