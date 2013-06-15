@@ -8,8 +8,7 @@ EXECUTABLE  = emfplus_decode
 
 build: $(CXXFILES)
 	$(CC) -c $(CXXFILES) -I$(INCLUDE) $(DEBUG)
-	mv *.o $(BUILD)
 
 clean:
-	rm -f $(BUILD)/*.o core $(BUILD)/$(EXECUTABLE)
+	rm -f *.o core
 	touch $(CXXFILES)
