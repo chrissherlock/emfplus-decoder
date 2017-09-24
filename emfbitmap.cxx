@@ -46,7 +46,7 @@ EmfRecord *ReadBitmapRecord(ifstream &emfFile, const EmfRecord &record) {
         default:
             cerr << "There is no way we should have got here..." << endl;
     }
-    
+
     bmpRecord->type = record.type;
     bmpRecord->size = record.size;
 

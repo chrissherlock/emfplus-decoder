@@ -14,7 +14,7 @@ std::ostream& operator << (std::ostream &s, Header &header) {
       << "==================================" << endl
       << "Type:             " << std::hex << std::showbase << header.type << endl
       << "Size:             " << std::dec << header.size << endl << endl;
-    
+
     s.setf(basefield);
 
     s << *header.header << endl;
@@ -64,8 +64,8 @@ std::ostream& operator << (std::ostream &s, EmfMetafileHeader &emfHeader) {
       << "    cy:           " << emfHeader.device->cy << endl
       << "Size (mm):        " << endl
       << "    cx:           " << emfHeader.millimeters->cx << "mm" << endl
-      << "    cy:           " << emfHeader.millimeters->cy << "mm" << endl; 
-    
+      << "    cy:           " << emfHeader.millimeters->cy << "mm" << endl;
+
     s.setf(basefield);
     return s;
 }
@@ -137,8 +137,8 @@ std::ostream& operator << (std::ostream& s, PFFlags &flags) {
 std::ostream& operator << (std::ostream& s, PFPixelType &type) {
     std::ios_base::fmtflags basefield = s.basefield;
 
-    s << "Pixel format type: " 
-      << (type == PFD_TYPE_RGBA ? "PDF_TYPE_RGBA (0x00)" : "PDF_TYPE_COLORINDEX (0x01)") 
+    s << "Pixel format type: "
+      << (type == PFD_TYPE_RGBA ? "PDF_TYPE_RGBA (0x00)" : "PDF_TYPE_COLORINDEX (0x01)")
       << endl;
 
     s.setf(basefield);
@@ -147,14 +147,14 @@ std::ostream& operator << (std::ostream& s, PFPixelType &type) {
 
 std::ostream& operator << (std::ostream& s, PixelFormatDescriptor& pxlFmtDesc) {
     std::ios_base::fmtflags basefield = s.basefield;
-    
+
     s << "EMF Pixel Format Descriptor" << endl
       << "==================================" << endl
       << "nSize:           " << pxlFmtDesc.nSize << endl
       << "nVersion:        " << pxlFmtDesc.nVersion << endl
       << "dwFlags:         " << pxlFmtDesc.dwFlags << endl
       << "iPixelType:      " << (pxlFmtDesc.iPixelType == PFD_TYPE_RGBA
-                                    ? "PFD_TYPE_RGBA" 
+                                    ? "PFD_TYPE_RGBA"
                                     : "PFD_TYPE_COLORINDEX") << endl
       << "cColorBits:      " << pxlFmtDesc.cColorBits << endl
       << "cRedBits:        " << pxlFmtDesc.cRedBits << endl

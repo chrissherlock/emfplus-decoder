@@ -6,7 +6,7 @@
 
 struct EmfRecord {
     unsigned int type;
-    std::string       typeName;
+    std::string  typeName;
     unsigned int size;
 };
 

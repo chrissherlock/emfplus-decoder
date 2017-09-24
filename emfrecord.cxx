@@ -8,7 +8,6 @@
 using namespace std;
 
 EmfRecords ReadRecords(ifstream &emfFile, unsigned int numRecords) {
-
     EmfRecords records(numRecords);
 
     for (int i=0; i < numRecords; i++) {
@@ -20,15 +19,15 @@ EmfRecords ReadRecords(ifstream &emfFile, unsigned int numRecords) {
         emfFile.read(reinterpret_cast<char *>(&record.size), 4);
 
         cout << "Offset: " << currentPos << " "
-             << "Record " << i << " is of type " 
+             << "Record " << i << " is of type "
              << std::hex << std::showbase << record.type
              << " and is " << std::dec << record.size << " bytes long." << endl;
 
         if (isBitmapRecord(record.type)) {
-            records[i] = ReadBitmapRecord(emfFile, record);        
+            records[i] = ReadBitmapRecord(emfFile, record);
             cout << "Parsing bitmap record..." << endl;
         } else if (isClippingRecord(record.type)) {
-            records[i] = ReadClippingRecord(emfFile, record);        
+            records[i] = ReadClippingRecord(emfFile, record);
             cout << "Parsing clipping record..." << endl;
         } else if (isCommentRecord(record.type)) {
             cerr << "Comment parsing not implemented yet" << endl;
@@ -51,7 +50,7 @@ EmfRecords ReadRecords(ifstream &emfFile, unsigned int numRecords) {
         } else if (isTransformRecord(record.type)) {
             cerr << "Transform parsing not implemented yet" << endl;
         }
-        
+
         // go to next record
         emfFile.seekg(currentPos + record.size, ios::beg);
     }

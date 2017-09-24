@@ -9,7 +9,7 @@
 #define EMFBITMAP
 
 // AlphaFormat field EMR_ALPHABLEND
-#define AC_SRC_ALPHA 0x01   
+#define AC_SRC_ALPHA 0x01
 
 EmfRecord *ReadBitBltRecord(std::ifstream&, const EmfRecord&);
 EmfRecord *ReadStretchBltRecord(std::ifstream&, const EmfRecord&);
