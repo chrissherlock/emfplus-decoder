@@ -8,32 +8,32 @@
 
 using namespace std;
 
-EmfRecord *ReadClippingRecord(ifstream &emfFile, unsigned int type) {
+EmfRecord *ReadClippingRecord(ifstream &emf, unsigned int type) {
     EmfRecord *record;
 
     switch (type) {
         case EMR_EXCLUDECLIPRECT:
-            record = ReadExcludeClipRecord(emfFile);
+            record = ReadExcludeClipRecord(emf);
             break;
 
         case EMR_EXTSELECTCLIPRGN:
-            record = ReadExtSelectClipRgnRecord(emfFile);
+            record = ReadExtSelectClipRgnRecord(emf);
             break;
 
         case EMR_INTERSECTCLIPRECT:
-            record = ReadIntersectClipRectRecord(emfFile);
+            record = ReadIntersectClipRectRecord(emf);
             break;
 
         case EMR_OFFSETCLIPRGN:
-//            record = ReadOffsetClipRgnRecord(emfFile);
+//            record = ReadOffsetClipRgnRecord(emf);
             break;
 
         case EMR_SELECTCLIPPATH:
-//            record = ReadSelectClipPathRecord(emfFile);
+//            record = ReadSelectClipPathRecord(emf);
             break;
 
         case EMR_SETMETARGN:
-//            record = ReadSetMetaRgnRecord(emfFile);
+//            record = ReadSetMetaRgnRecord(emf);
             break;
 
         default:
@@ -45,37 +45,37 @@ EmfRecord *ReadClippingRecord(ifstream &emfFile, unsigned int type) {
     return record;
 }
 
-EmfRecord *ReadExcludeClipRecord(ifstream &emfFile) {
+EmfRecord *ReadExcludeClipRecord(ifstream &emf) {
     EmfExcludeClipRect excludeClipRectRecord;
 
-    emfFile.read(reinterpret_cast<char *>(&excludeClipRectRecord.Clip->left), 4);
-    emfFile.read(reinterpret_cast<char *>(&excludeClipRectRecord.Clip->top), 4);
-    emfFile.read(reinterpret_cast<char *>(&excludeClipRectRecord.Clip->right), 4);
-    emfFile.read(reinterpret_cast<char *>(&excludeClipRectRecord.Clip->bottom), 4);
+    emf.read(reinterpret_cast<char *>(&excludeClipRectRecord.Clip->left), 4);
+    emf.read(reinterpret_cast<char *>(&excludeClipRectRecord.Clip->top), 4);
+    emf.read(reinterpret_cast<char *>(&excludeClipRectRecord.Clip->right), 4);
+    emf.read(reinterpret_cast<char *>(&excludeClipRectRecord.Clip->bottom), 4);
 
     EmfExcludeClipRect* retVal = &excludeClipRectRecord;
     return retVal;
 }
 
-RegionDataHeader *ReadRegionDataHeader(ifstream &emfFile) {
+RegionDataHeader *ReadRegionDataHeader(ifstream &emf) {
     RegionDataHeader rgnDataHdr;
 
-    emfFile.read(reinterpret_cast<char *>(&rgnDataHdr.rgnDataSize), 4);
-    emfFile.read(reinterpret_cast<char *>(&rgnDataHdr.rgnDataType), 4);
-    emfFile.read(reinterpret_cast<char *>(&rgnDataHdr.CountRects), 4);
-    emfFile.read(reinterpret_cast<char *>(&rgnDataHdr.RgnSize), 4);
-    emfFile.read(reinterpret_cast<char *>(&rgnDataHdr.Bounds->left), 4);
-    emfFile.read(reinterpret_cast<char *>(&rgnDataHdr.Bounds->top), 4);
-    emfFile.read(reinterpret_cast<char *>(&rgnDataHdr.Bounds->right), 4);
-    emfFile.read(reinterpret_cast<char *>(&rgnDataHdr.Bounds->bottom), 4);
+    emf.read(reinterpret_cast<char *>(&rgnDataHdr.rgnDataSize), 4);
+    emf.read(reinterpret_cast<char *>(&rgnDataHdr.rgnDataType), 4);
+    emf.read(reinterpret_cast<char *>(&rgnDataHdr.CountRects), 4);
+    emf.read(reinterpret_cast<char *>(&rgnDataHdr.RgnSize), 4);
+    emf.read(reinterpret_cast<char *>(&rgnDataHdr.Bounds->left), 4);
+    emf.read(reinterpret_cast<char *>(&rgnDataHdr.Bounds->top), 4);
+    emf.read(reinterpret_cast<char *>(&rgnDataHdr.Bounds->right), 4);
+    emf.read(reinterpret_cast<char *>(&rgnDataHdr.Bounds->bottom), 4);
 
     RegionDataHeader* retVal = &rgnDataHdr;
     return retVal;
 }
 
-RegionData *ReadRegionData(ifstream &emfFile) {
+RegionData *ReadRegionData(ifstream &emf) {
     RegionData *rgnData;
-    rgnData = static_cast<RegionData*> (ReadRegionDataHeader(emfFile));
+    rgnData = static_cast<RegionData*> (ReadRegionDataHeader(emf));
 
     int numRects = rgnData->RgnSize / sizeof(RectL);
     vector<RectL> rgnRects(numRects);
@@ -83,10 +83,10 @@ RegionData *ReadRegionData(ifstream &emfFile) {
     for (int i=0; i < numRects; i++)
     {
         RectL rect;
-        emfFile.read(reinterpret_cast<char *>(&rect.left), 4);
-        emfFile.read(reinterpret_cast<char *>(&rect.top), 4);
-        emfFile.read(reinterpret_cast<char *>(&rect.right), 4);
-        emfFile.read(reinterpret_cast<char *>(&rect.bottom), 4);
+        emf.read(reinterpret_cast<char *>(&rect.left), 4);
+        emf.read(reinterpret_cast<char *>(&rect.top), 4);
+        emf.read(reinterpret_cast<char *>(&rect.right), 4);
+        emf.read(reinterpret_cast<char *>(&rect.bottom), 4);
 
         rgnRects[i] = rect;
     }
@@ -96,44 +96,44 @@ RegionData *ReadRegionData(ifstream &emfFile) {
     return rgnData;
 }
 
-EmfRecord *ReadExtSelectClipRgnRecord(ifstream &emfFile) {
+EmfRecord *ReadExtSelectClipRgnRecord(ifstream &emf) {
     EmfExtSelectClipRgn extSelectClipRgnRecord;
 
-    emfFile.read(reinterpret_cast<char *>(&extSelectClipRgnRecord.RgnDataSize), 4);
-    emfFile.read(reinterpret_cast<char *>(&extSelectClipRgnRecord.RegionMode), 4);
+    emf.read(reinterpret_cast<char *>(&extSelectClipRgnRecord.RgnDataSize), 4);
+    emf.read(reinterpret_cast<char *>(&extSelectClipRgnRecord.RegionMode), 4);
 
-    extSelectClipRgnRecord.RgnData = ReadRegionData(emfFile);
+    extSelectClipRgnRecord.RgnData = ReadRegionData(emf);
 
     EmfExtSelectClipRgn* retVal = &extSelectClipRgnRecord;
     return retVal;
 }
 
-EmfRecord *ReadIntersectClipRectRecord(ifstream &emfFile) {
+EmfRecord *ReadIntersectClipRectRecord(ifstream &emf) {
     EmfIntersectClipRect intersectClipRectRecord;
 
-    emfFile.read(reinterpret_cast<char *>(&intersectClipRectRecord.Clip->left), 4);
-    emfFile.read(reinterpret_cast<char *>(&intersectClipRectRecord.Clip->top), 4);
-    emfFile.read(reinterpret_cast<char *>(&intersectClipRectRecord.Clip->right), 4);
-    emfFile.read(reinterpret_cast<char *>(&intersectClipRectRecord.Clip->bottom), 4);
+    emf.read(reinterpret_cast<char *>(&intersectClipRectRecord.Clip->left), 4);
+    emf.read(reinterpret_cast<char *>(&intersectClipRectRecord.Clip->top), 4);
+    emf.read(reinterpret_cast<char *>(&intersectClipRectRecord.Clip->right), 4);
+    emf.read(reinterpret_cast<char *>(&intersectClipRectRecord.Clip->bottom), 4);
 
     EmfIntersectClipRect *retVal = &intersectClipRectRecord;
     return retVal;
 }
 
-EmfRecord *ReadOffsetClipRgnRecord(ifstream &emfFile) {
+EmfRecord *ReadOffsetClipRgnRecord(ifstream &emf) {
     EmfOffsetClipRgn offsetClipRgnRecord;
 
-    emfFile.read(reinterpret_cast<char *>(&offsetClipRgnRecord.Offset->x), 4);
-    emfFile.read(reinterpret_cast<char *>(&offsetClipRgnRecord.Offset->y), 4);
+    emf.read(reinterpret_cast<char *>(&offsetClipRgnRecord.Offset->x), 4);
+    emf.read(reinterpret_cast<char *>(&offsetClipRgnRecord.Offset->y), 4);
 
     EmfOffsetClipRgn *retVal = &offsetClipRgnRecord;
     return retVal;
 }
 
-EmfRecord *ReadSelectClipPathRecord(ifstream &emfFile) {
+EmfRecord *ReadSelectClipPathRecord(ifstream &emf) {
     EmfSelectClipPath selectClipPathRecord;
 
-    emfFile.read(reinterpret_cast<char *>(selectClipPathRecord.RegionMode), 4);
+    emf.read(reinterpret_cast<char *>(selectClipPathRecord.RegionMode), 4);
 
     EmfSelectClipPath *retVal = &selectClipPathRecord;
     return retVal;

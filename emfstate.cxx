@@ -6,160 +6,160 @@
 
 using namespace std;
 
-EmfRecord *ReadStateRecord(ifstream &emfFile, unsigned int type) {
+EmfRecord *ReadStateRecord(ifstream &emf, unsigned int type) {
     EmfRecord *record;
 
     switch (type) {
         case EMR_SETWINDOWORGEX:
-            record = ReadSetWindowOrgExRecord(emfFile);
+            record = ReadSetWindowOrgExRecord(emf);
             break;
 
         case EMR_SETVIEWPORTEXTEX:
-            record = ReadSetViewportExtExRecord(emfFile);
+            record = ReadSetViewportExtExRecord(emf);
             break;
 
         case EMR_SETVIEWPORTORGEX:
-            record = ReadSetViewportOrgExRecord(emfFile);
+            record = ReadSetViewportOrgExRecord(emf);
             break;
 
         case EMR_SETBRUSHORGEX:
-            record = ReadSetBrushOrgExRecord(emfFile);
+            record = ReadSetBrushOrgExRecord(emf);
             break;
 
         case EMR_SETPIXELV:
-            record = ReadSetPixelVRecord(emfFile);
+            record = ReadSetPixelVRecord(emf);
             break;
 
         case EMR_SETMAPPERFLAGS:
-            record = ReadSetMapperFlagsRecord(emfFile);
+            record = ReadSetMapperFlagsRecord(emf);
             break;
 
         case EMR_SETMAPMODE:
-            record = ReadSetMapModeRecord(emfFile);
+            record = ReadSetMapModeRecord(emf);
             break;
 
         case EMR_SETBKMODE:
-            record = ReadSetBkModeRecord(emfFile);
+            record = ReadSetBkModeRecord(emf);
             break;
 
         case EMR_SETPOLYFILLMODE:
-            record = ReadSetPolyfillModeRecord(emfFile);
+            record = ReadSetPolyfillModeRecord(emf);
             break;
 
         case EMR_SETROP2:
-            record = ReadSetRop2Record(emfFile);
+            record = ReadSetRop2Record(emf);
             break;
 
         case EMR_SETSTRETCHBLTMODE:
-            record = ReadSetStretchBltModeRecord(emfFile);
+            record = ReadSetStretchBltModeRecord(emf);
             break;
 
         case EMR_SETTEXTALIGN:
-            record = ReadSetTextAlignRecord(emfFile);
+            record = ReadSetTextAlignRecord(emf);
             break;
 
         case EMR_SETCOLORADJUSTMENT:
-            record = ReadSetColorAdjustmentRecord(emfFile);
+            record = ReadSetColorAdjustmentRecord(emf);
             break;
 
         case EMR_SETTEXTCOLOR:
-            record = ReadSetTextColorRecord(emfFile);
+            record = ReadSetTextColorRecord(emf);
             break;
 
         case EMR_SETBKCOLOR:
-            record = ReadSetBkColorRecord(emfFile);
+            record = ReadSetBkColorRecord(emf);
             break;
 
         case EMR_OFFSETCLIPRGN:
-            record = ReadOffsetClipRgnRecord(emfFile);
+            record = ReadOffsetClipRgnRecord(emf);
             break;
 
         case EMR_MOVETOEX:
-            record = ReadMoveToExRecord(emfFile);
+            record = ReadMoveToExRecord(emf);
             break;
 
         case EMR_SETMETARGN:
-            record = ReadSetMetaRgnRecord(emfFile);
+            record = ReadSetMetaRgnRecord(emf);
             break;
 
         case EMR_EXCLUDECLIPRECT:
-            record = ReadExcludeClipRectRecord(emfFile);
+            record = ReadExcludeClipRectRecord(emf);
             break;
 
         case EMR_INTERSECTCLIPRECT:
-            record = ReadIntersectClipRectRecord(emfFile);
+            record = ReadIntersectClipRectRecord(emf);
             break;
 
         case EMR_SCALEVIEWPORTEXTEX:
-            record = ReadViewportExtExRecord(emfFile);
+            record = ReadViewportExtExRecord(emf);
             break;
 
         case EMR_SCALEWINDOWEXTEX:
-            record = ReadScaleWindowExtExRecord(emfFile);
+            record = ReadScaleWindowExtExRecord(emf);
             break;
 
         case EMR_SAVEDC:
-            record = ReadSaveDCRecord(emfFile);
+            record = ReadSaveDCRecord(emf);
             break;
 
         case EMR_RESTOREDC:
-            record = ReadRestoreDCRecord(emfFile);
+            record = ReadRestoreDCRecord(emf);
             break;
 
         case EMR_RESIZEPALETTE:
-            record = ReadResizePaletteRecord(emfFile);
+            record = ReadResizePaletteRecord(emf);
             break;
 
         case EMR_REALIZEPALETTE:
-            record = ReadRealizePaletteRecord(emfFile);
+            record = ReadRealizePaletteRecord(emf);
             break;
 
         case EMR_SETARCDIRECTION:
-            record = ReadSetArcDirectionRecord(emfFile);
+            record = ReadSetArcDirectionRecord(emf);
             break;
 
         case EMR_SETMITERLIMIT:
-            record = ReadSetMiterLimitRecord(emfFile);
+            record = ReadSetMiterLimitRecord(emf);
             break;
 
         case EMR_INVERTRGN:
-            record = ReadInvertRgnRecord(emfFile);
+            record = ReadInvertRgnRecord(emf);
             break;
 
         case EMR_SETICMMODE:
-            record = ReadSetICMModeRecord(emfFile);
+            record = ReadSetICMModeRecord(emf);
             break;
 
         case EMR_PIXELFORMAT:
-            record = ReadPixelFormatRecord(emfFile);
+            record = ReadPixelFormatRecord(emf);
             break;
 
         case EMR_FORCEUFIMAPPING:
-            record = ReadForceUFIMappingRecord(emfFile);
+            record = ReadForceUFIMappingRecord(emf);
             break;
 
         case EMR_SETICMPROFILEA:
-            record = ReadSetICMProfileARecord(emfFile);
+            record = ReadSetICMProfileARecord(emf);
             break;
 
         case EMR_SETICMPROFILEW:
-            record = ReadSetICMProfileWRecord(emfFile);
+            record = ReadSetICMProfileWRecord(emf);
             break;
 
         case EMR_SETLAYOUT:
-            record = ReadSetLayoutRecord(emfFile);
+            record = ReadSetLayoutRecord(emf);
             break;
 
         case EMR_SETLINKEDUFIS:
-            record = ReadSetLinkedUFIsRecord(emfFile);
+            record = ReadSetLinkedUFIsRecord(emf);
             break;
 
         case EMR_SETTEXTJUSTIFICATION:
-            record = ReadSetTextJustificationRecord(emfFile);
+            record = ReadSetTextJustificationRecord(emf);
             break;
 
         case EMR_COLORMATCHTOTARGETW:
-            record = ReadColorMatchToTargetWRecord(emfFile);
+            record = ReadColorMatchToTargetWRecord(emf);
             break;
 
         default:
@@ -171,21 +171,21 @@ EmfRecord *ReadStateRecord(ifstream &emfFile, unsigned int type) {
     return record;
 }
 
-EmfRecord *ReadSetWindowOrgExRecord(ifstream &emfFile) {
+EmfRecord *ReadSetWindowOrgExRecord(ifstream &emf) {
     EmfSetWindowOrgExRecord record;
 
-    emfFile.read(reinterpret_cast<char *>(&record.Origin->x), 4);
-    emfFile.read(reinterpret_cast<char *>(&record.Origin->y), 4);
+    emf.read(reinterpret_cast<char *>(&record.Origin->x), 4);
+    emf.read(reinterpret_cast<char *>(&record.Origin->y), 4);
 
     EmfRecord *retRecord = &record;
     return retRecord;
 }
 
-EmfRecord *ReadSetViewportExtExRecord(ifstream &emfFile) {
+EmfRecord *ReadSetViewportExtExRecord(ifstream &emf) {
     EmfSetWindowExtExRecord record;
 
-    emfFile.read(reinterpret_cast<char *>(&record.Extent->cx), 4);
-    emfFile.read(reinterpret_cast<char *>(&record.Extent->cy), 4);
+    emf.read(reinterpret_cast<char *>(&record.Extent->cx), 4);
+    emf.read(reinterpret_cast<char *>(&record.Extent->cy), 4);
 
     EmfRecord *retRecord = &record;
     return retRecord;
