@@ -17,8 +17,7 @@ std::ostream& operator << (std::ostream &s, EmfBitBlt &record) {
 
     s << "EmfBitBlt record                  " << endl
       << "==================================" << endl
-      << "Type:                     " << std::hex << std::showbase << record.type << endl
-      << "Size:                     " << std::dec << record.size << endl << endl;
+      << "Type:                     " << std::hex << std::showbase << record.type << endl;
 
     s.setf(basefield);
 
@@ -47,8 +46,7 @@ std::ostream& operator << (std::ostream &s, EmfStretchBlt &record) {
 
     s << "EmfStretchBlt record              " << endl
       << "==================================" << endl
-      << "Type:                     " << std::hex << std::showbase << record.type << endl
-      << "Size:                     " << std::dec << record.size << endl << endl;
+      << "Type:                     " << std::hex << std::showbase << record.type << endl;
 
     s.setf(basefield);
 
@@ -76,8 +74,7 @@ std::ostream& operator << (std::ostream &s, EmfMaskBlt &record) {
 
     s << "EmfMaskBlt record                 " << endl
       << "==================================" << endl
-      << "Type:                     " << std::hex << std::showbase << record.type << endl
-      << "Size:                     " << std::dec << record.size << endl << endl;
+      << "Type:                     " << std::hex << std::showbase << record.type << endl;
 
     s.setf(basefield);
 

@@ -8,42 +8,44 @@
 
 using namespace std;
 
-EmfRecord *ReadClippingRecord(ifstream &emfFile, const EmfRecord &record) {
-    EmfRecord *clippingRecord;
+EmfRecord *ReadClippingRecord(ifstream &emfFile, unsigned int type) {
+    EmfRecord *record;
 
-    switch (record.type) {
+    switch (type) {
         case EMR_EXCLUDECLIPRECT:
-            clippingRecord = ReadExcludeClipRecord(emfFile, record);
+            record = ReadExcludeClipRecord(emfFile);
             break;
 
         case EMR_EXTSELECTCLIPRGN:
-            clippingRecord = ReadExtSelectClipRgnRecord(emfFile, record);
+            record = ReadExtSelectClipRgnRecord(emfFile);
             break;
 
         case EMR_INTERSECTCLIPRECT:
-            clippingRecord = ReadIntersectClipRectRecord(emfFile, record);
+            record = ReadIntersectClipRectRecord(emfFile);
             break;
 
         case EMR_OFFSETCLIPRGN:
-//            clippingRecord = ReadOffsetClipRgnRecord(emfFile, record);
+//            record = ReadOffsetClipRgnRecord(emfFile);
             break;
 
         case EMR_SELECTCLIPPATH:
-//            clippingRecord = ReadSelectClipPathRecord(emfFile, record);
+//            record = ReadSelectClipPathRecord(emfFile);
             break;
 
         case EMR_SETMETARGN:
-//            clippingRecord = ReadSetMetaRgnRecord(emfFile, record);
+//            record = ReadSetMetaRgnRecord(emfFile);
             break;
 
         default:
             cerr << "There is no way we should have got here..." << endl;
     }
 
-    return clippingRecord;
+    record->type = type;
+
+    return record;
 }
 
-EmfRecord *ReadExcludeClipRecord(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadExcludeClipRecord(ifstream &emfFile) {
     EmfExcludeClipRect excludeClipRectRecord;
 
     emfFile.read(reinterpret_cast<char *>(&excludeClipRectRecord.Clip->left), 4);
@@ -76,7 +78,7 @@ RegionData *ReadRegionData(ifstream &emfFile) {
     rgnData = static_cast<RegionData*> (ReadRegionDataHeader(emfFile));
 
     int numRects = rgnData->RgnSize / sizeof(RectL);
-    vector<RectL> rgnRects(numRects); 
+    vector<RectL> rgnRects(numRects);
 
     for (int i=0; i < numRects; i++)
     {
@@ -94,9 +96,9 @@ RegionData *ReadRegionData(ifstream &emfFile) {
     return rgnData;
 }
 
-EmfRecord *ReadExtSelectClipRgnRecord(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadExtSelectClipRgnRecord(ifstream &emfFile) {
     EmfExtSelectClipRgn extSelectClipRgnRecord;
-    
+
     emfFile.read(reinterpret_cast<char *>(&extSelectClipRgnRecord.RgnDataSize), 4);
     emfFile.read(reinterpret_cast<char *>(&extSelectClipRgnRecord.RegionMode), 4);
 
@@ -106,19 +108,19 @@ EmfRecord *ReadExtSelectClipRgnRecord(ifstream &emfFile, const EmfRecord &record
     return retVal;
 }
 
-EmfRecord *ReadIntersectClipRectRecord(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadIntersectClipRectRecord(ifstream &emfFile) {
     EmfIntersectClipRect intersectClipRectRecord;
 
     emfFile.read(reinterpret_cast<char *>(&intersectClipRectRecord.Clip->left), 4);
     emfFile.read(reinterpret_cast<char *>(&intersectClipRectRecord.Clip->top), 4);
     emfFile.read(reinterpret_cast<char *>(&intersectClipRectRecord.Clip->right), 4);
     emfFile.read(reinterpret_cast<char *>(&intersectClipRectRecord.Clip->bottom), 4);
-    
+
     EmfIntersectClipRect *retVal = &intersectClipRectRecord;
     return retVal;
 }
 
-EmfRecord *ReadOffsetClipRgnRecord(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadOffsetClipRgnRecord(ifstream &emfFile) {
     EmfOffsetClipRgn offsetClipRgnRecord;
 
     emfFile.read(reinterpret_cast<char *>(&offsetClipRgnRecord.Offset->x), 4);
@@ -128,7 +130,7 @@ EmfRecord *ReadOffsetClipRgnRecord(ifstream &emfFile, const EmfRecord &record) {
     return retVal;
 }
 
-EmfRecord *ReadSelectClipPathRecord(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadSelectClipPathRecord(ifstream &emfFile) {
     EmfSelectClipPath selectClipPathRecord;
 
     emfFile.read(reinterpret_cast<char *>(selectClipPathRecord.RegionMode), 4);

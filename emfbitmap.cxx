@@ -7,53 +7,52 @@
 
 using namespace std;
 
-EmfRecord *ReadBitmapRecord(ifstream &emfFile, const EmfRecord &record) {
-    EmfRecord *bmpRecord;
+EmfRecord *ReadBitmapRecord(ifstream &emfFile, unsigned int type) {
+    EmfRecord *record;
 
-    switch (record.type) {
+    switch (type) {
         case EMR_BITBLT:
-            bmpRecord = ReadBitBltRecord(emfFile, record);
+            record = ReadBitBltRecord(emfFile, record);
             break;
 
         case EMR_STRETCHBLT:
-            bmpRecord = ReadStretchBltRecord(emfFile, record);
+            record = ReadStretchBltRecord(emfFile, record);
             break;
 
         case EMR_MASKBLT:
-            bmpRecord = ReadMaskBltRecord(emfFile, record);
+            record = ReadMaskBltRecord(emfFile, record);
             break;
 
         case EMR_PLGBLT:
-            bmpRecord = ReadPlgBltRecord(emfFile, record);
+            record = ReadPlgBltRecord(emfFile, record);
             break;
 
         case EMR_SETDIBITSTODEVICE:
-            bmpRecord = ReadSetDIBitsToDeviceRecord(emfFile, record);
+            record = ReadSetDIBitsToDeviceRecord(emfFile, record);
             break;
 
         case EMR_STRETCHDIBITS:
-            bmpRecord = ReadStretchDIBitsRecord(emfFile, record);
+            record = ReadStretchDIBitsRecord(emfFile, record);
             break;
 
         case EMR_ALPHABLEND:
-            bmpRecord = ReadAlphaBlendRecord(emfFile, record);
+            record = ReadAlphaBlendRecord(emfFile, record);
             break;
 
         case EMR_TRANSPARENTBLT:
-            bmpRecord = ReadTransparentBltRecord(emfFile, record);
+            record = ReadTransparentBltRecord(emfFile, record);
             break;
 
         default:
             cerr << "There is no way we should have got here..." << endl;
     }
 
-    bmpRecord->type = record.type;
-    bmpRecord->size = record.size;
+    record->type = type;
 
-    return bmpRecord;
+    return record;
 }
 
-EmfRecord *ReadBitBltRecord(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadBitBltRecord(ifstream &emfFile) {
     EmfBitBlt bitBltRecord;
 
     emfFile.read(reinterpret_cast<char *>(&bitBltRecord.Bounds->left), 4);
@@ -85,7 +84,7 @@ EmfRecord *ReadBitBltRecord(ifstream &emfFile, const EmfRecord &record) {
     return retRecord;
 }
 
-EmfRecord *ReadStretchBltRecord(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadStretchBltRecord(ifstream &emfFile) {
     EmfStretchBlt stretchBltRecord;
 
     emfFile.read(reinterpret_cast<char *>(&stretchBltRecord.Bounds->left), 4);
@@ -117,7 +116,7 @@ EmfRecord *ReadStretchBltRecord(ifstream &emfFile, const EmfRecord &record) {
     return retRecord;
 }
 
-EmfRecord *ReadMaskBltRecord(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadMaskBltRecord(ifstream &emfFile) {
     EmfMaskBlt maskBltRecord;
 
     emfFile.read(reinterpret_cast<char *>(&maskBltRecord.Bounds->left), 4);
@@ -155,7 +154,7 @@ EmfRecord *ReadMaskBltRecord(ifstream &emfFile, const EmfRecord &record) {
     return retRecord;
 }
 
-EmfRecord *ReadPlgBltRecord(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadPlgBltRecord(ifstream &emfFile) {
     EmfPlgBlt plgBltRecord;
 
     emfFile.read(reinterpret_cast<char *>(&plgBltRecord.Bounds->left), 4);
@@ -188,7 +187,7 @@ EmfRecord *ReadPlgBltRecord(ifstream &emfFile, const EmfRecord &record) {
     return retRecord;
 }
 
-EmfRecord *ReadSetDIBitsToDeviceRecord(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadSetDIBitsToDeviceRecord(ifstream &emfFile) {
     EmfSetDIBitsToDevice setDIBitsToDeviceRecord;
 
     emfFile.read(reinterpret_cast<char *>(&setDIBitsToDeviceRecord.Bounds->left), 4);
@@ -213,7 +212,7 @@ EmfRecord *ReadSetDIBitsToDeviceRecord(ifstream &emfFile, const EmfRecord &recor
     return retRecord;
 }
 
-EmfRecord *ReadStretchDIBitsRecord(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadStretchDIBitsRecord(ifstream &emfFile) {
     EmfStretchDIBits stretchDIBRecord;
 
     emfFile.read(reinterpret_cast<char *>(&stretchDIBRecord.Bounds->left), 4);
@@ -239,7 +238,7 @@ EmfRecord *ReadStretchDIBitsRecord(ifstream &emfFile, const EmfRecord &record) {
     return retRecord;
 }
 
-EmfRecord *ReadAlphaBlendRecord(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadAlphaBlendRecord(ifstream &emfFile) {
     EmfAlphaBlend alphaBlendRecord;
 
     emfFile.read(reinterpret_cast<char *>(&alphaBlendRecord.Bounds->left), 4);
@@ -280,7 +279,7 @@ EmfRecord *ReadAlphaBlendRecord(ifstream &emfFile, const EmfRecord &record) {
     return retRecord;
 }
 
-EmfRecord *ReadTransparentBltRecord(ifstream &emfFile, const EmfRecord &record) {
+EmfRecord *ReadTransparentBltRecord(ifstream &emfFile) {
     EmfTransparentBlt transparentBltRecord;
 
     emfFile.read(reinterpret_cast<char *>(&transparentBltRecord.Bounds->left), 4);

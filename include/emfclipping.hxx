@@ -8,6 +8,18 @@
 #ifndef EMFCLIPPING
 #define EMFCLIPPING
 
+EmfRecord *ReadExcludeClipRecord(std::ifstream&);
+EmfRecord *ReadExtSelectClipRgnRecord(std::ifstream&);
+EmfRecord *ReadIntersectClipRectRecord(std::ifstream&);
+EmfRecord *ReadOffsetClipRgnRecord(std::ifstream&);
+EmfRecord *ReadSelectClipPathRecord(std::ifstream&);
+
+struct RegionDataHeader;
+struct RegionData;
+
+RegionDataHeader *ReadRegionDataHeader(std::ifstream&);
+RegionData       *ReadRegionData(std::ifstream&);
+
 // defined in [MS-EMF] section 2.1.29 RegionMode Enumeration
 enum RegionMode {
     RGN_AND  = 0x01,
@@ -40,7 +52,7 @@ struct EmfExcludeClipRect : EmfRecord {
 struct EmfExtSelectClipRgn : EmfRecord {
     unsigned int    RgnDataSize;
     unsigned int    RegionMode;
-    RegionData      *RgnData;   // if RegionMode is RGN_COPY, 
+    RegionData      *RgnData;   // if RegionMode is RGN_COPY,
                                 // should be NULL
 };
 
@@ -58,14 +70,5 @@ struct EmfOffsetClipRgn : EmfRecord {
 struct EmfSelectClipPath : EmfRecord {
     unsigned int    RegionMode;
 };
-
-EmfRecord *ReadExcludeClipRecord(std::ifstream&, const EmfRecord&); 
-EmfRecord *ReadExtSelectClipRgnRecord(std::ifstream&, const EmfRecord&);
-EmfRecord *ReadIntersectClipRectRecord(std::ifstream&, const EmfRecord&);
-EmfRecord *ReadOffsetClipRgnRecord(std::ifstream&, const EmfRecord&);
-EmfRecord *ReadSelectClipPathRecord(std::ifstream&, const EmfRecord&);
-    
-RegionDataHeader *ReadRegionDataHeader(std::ifstream&);
-RegionData       *ReadRegionData(std::ifstream&);
 
 #endif

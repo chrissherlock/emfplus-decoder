@@ -1,8 +1,8 @@
 CC          = clang++ -std=c++11
 DEBUG       = -g
 CXXFILES    = main.cxx $(EMFHDRFILES) $(PRINTFILES) $(EMFRECORDS)
-EMFHDRFILES = header.cxx emfrecord.cxx emfclipping.cxx
-EMFRECORDS  = emfbitmap.cxx
+EMFHDRFILES = header.cxx emfrecord.cxx
+EMFRECORDS  = emfclipping.cxx emfstate.cxx emfbitmap.cxx
 PRINTFILES  = header_output.cxx bitmap_output.cxx
 INCLUDE     = include
 EXECUTABLE  = emfplus_decode

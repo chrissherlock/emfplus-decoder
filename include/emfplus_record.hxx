@@ -4,7 +4,7 @@
 #define EMFPLUSRECORD
 
 struct EmfPlusRecord : EmfRecord {
-    
+
 };
 
 #endif

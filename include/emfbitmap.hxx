@@ -11,14 +11,14 @@
 // AlphaFormat field EMR_ALPHABLEND
 #define AC_SRC_ALPHA 0x01
 
-EmfRecord *ReadBitBltRecord(std::ifstream&, const EmfRecord&);
-EmfRecord *ReadStretchBltRecord(std::ifstream&, const EmfRecord&);
-EmfRecord *ReadMaskBltRecord(std::ifstream&, const EmfRecord&);
-EmfRecord *ReadPlgBltRecord(std::ifstream&, const EmfRecord&);
-EmfRecord *ReadSetDIBitsToDeviceRecord(std::ifstream&, const EmfRecord&);
-EmfRecord *ReadStretchDIBitsRecord(std::ifstream&, const EmfRecord&);
-EmfRecord *ReadAlphaBlendRecord(std::ifstream&, const EmfRecord&);
-EmfRecord *ReadTransparentBltRecord(std::ifstream&, const EmfRecord&);
+EmfRecord *ReadBitBltRecord(std::ifstream&, unsigned int);
+EmfRecord *ReadStretchBltRecord(std::ifstream&, unsigned int);
+EmfRecord *ReadMaskBltRecord(std::ifstream&, unsigned int);
+EmfRecord *ReadPlgBltRecord(std::ifstream&, unsigned int);
+EmfRecord *ReadSetDIBitsToDeviceRecord(std::ifstream&, unsigned int);
+EmfRecord *ReadStretchDIBitsRecord(std::ifstream&, unsigned int);
+EmfRecord *ReadAlphaBlendRecord(std::ifstream&, unsigned int);
+EmfRecord *ReadTransparentBltRecord(std::ifstream&, unsigned int);
 
 int isBitmapRecord(unsigned int);
 int isClippingRecord(unsigned int);

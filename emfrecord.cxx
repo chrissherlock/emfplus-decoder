@@ -11,48 +11,51 @@ EmfRecords ReadRecords(ifstream &emfFile, unsigned int numRecords) {
     EmfRecords records(numRecords);
 
     for (int i=0; i < numRecords; i++) {
-        EmfRecord record;
-
+        unsigned int type=0, size=0;
         int currentPos = emfFile.tellg();
 
-        emfFile.read(reinterpret_cast<char *>(&record.type), 4);
-        emfFile.read(reinterpret_cast<char *>(&record.size), 4);
+        emfFile.read(reinterpret_cast<char *>(&type), 4);
+        emfFile.read(reinterpret_cast<char *>(&size), 4);
 
         cout << "Offset: " << currentPos << " "
              << "Record " << i << " is of type "
-             << std::hex << std::showbase << record.type
-             << " and is " << std::dec << record.size << " bytes long." << endl;
+             << std::hex << std::showbase << type
+             << " and is " << std::dec << size << " bytes long." << endl;
 
-        if (isBitmapRecord(record.type)) {
-            records[i] = ReadBitmapRecord(emfFile, record);
+        if (isBitmapRecord(type)) {
+            records[i] = ReadBitmapRecord(emfFile, type);
             cout << "Parsing bitmap record..." << endl;
-        } else if (isClippingRecord(record.type)) {
-            records[i] = ReadClippingRecord(emfFile, record);
+            cout << records[i];
+        } else if (isClippingRecord(type)) {
+            records[i] = ReadClippingRecord(emfFile, type);
             cout << "Parsing clipping record..." << endl;
-        } else if (isCommentRecord(record.type)) {
+            cout << records[i];
+        } else if (isCommentRecord(type)) {
             cerr << "Comment parsing not implemented yet" << endl;
-        } else if (isControlRecord(record.type)) {
+        } else if (isControlRecord(type)) {
             cerr << "Control parsing not implemented yet" << endl;
-        } else if (isDrawingRecord(record.type)) {
+        } else if (isDrawingRecord(type)) {
             cerr << "Drawing parsing not implemented yet" << endl;
-        } else if (isEscapeRecord(record.type)) {
+        } else if (isEscapeRecord(type)) {
             cerr << "Escape parsing not implemented yet" << endl;
-        } else if (isObjectCreationRecord(record.type)) {
+        } else if (isObjectCreationRecord(type)) {
             cerr << "Object escape parsing not implemented yet" << endl;
-        } else if (isObjectManipulationRecord(record.type)) {
+        } else if (isObjectManipulationRecord(type)) {
             cerr << "Object manipulation parsing not implemented yet" << endl;
-        } else if (isOpenGLRecord(record.type)) {
+        } else if (isOpenGLRecord(type)) {
             cerr << "OpenGL parsing not implemented yet" << endl;
-        } else if (isPathBracketRecord(record.type)) {
+        } else if (isPathBracketRecord(type)) {
             cerr << "Path bracket parsing not implemented yet" << endl;
-        } else if (isStateRecord(record.type)) {
-            cerr << "State parsing not implemented yet" << endl;
-        } else if (isTransformRecord(record.type)) {
+        } else if (isStateRecord(type)) {
+            records[i] = ReadStateRecord(emfFile, type);
+            cout << "Parsing state record..." << endl;
+            cout << records[i];
+        } else if (isTransformRecord(type)) {
             cerr << "Transform parsing not implemented yet" << endl;
         }
 
         // go to next record
-        emfFile.seekg(currentPos + record.size, ios::beg);
+        emfFile.seekg(currentPos + size, ios::beg);
     }
 
     return records;
