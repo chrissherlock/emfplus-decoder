@@ -284,5 +284,5 @@ enum TernaryRasterOperation {
     DPSOO       = 0xFE,
     WHITENESS   = 0xFF
 };
-    
+
 #endif

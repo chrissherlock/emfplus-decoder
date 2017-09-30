@@ -13,6 +13,9 @@ struct XForm {
     float Dy;
 };
 
+std::ostream& operator << (std::ostream&, XForm&);
+XForm *ReadXForm(ifstream &emf);
+
 // defined in [MS-EMF] 2.1.9 DIBColors Enumeration
 
 enum DIBColors {
@@ -38,9 +41,15 @@ struct ColorAdjustment {
     short int RedGreenTint;
 };
 
+std::ostream& operator << (std::ostream&, ColorAdjustment&);
+ColorAdjustment *ReadColorAdjustment(ifstream &emf);
+
 struct UniversalFontId {
     unsigned int Checksum;
     unsigned int Index;
 };
+
+std::ostream& operator << (std::ostream&, UniversalFontId&);
+UniversalFontId *ReadUniversalFontId(ifstream &emf);
 
 #endif

@@ -9,13 +9,13 @@
 std::ostream& operator << (std::ostream&, EmfRecord&);
 
 // Bitmap records
-std::ostream& operator << (std::ostream&, EmfBitBlt&);
-std::ostream& operator << (std::ostream&, EmfStretchBlt&);
-std::ostream& operator << (std::ostream&, EmfMaskBlt&);
-//std::ostream& operator << (std::ostream&, EmfPlgBlt&);
-//std::ostream& operator << (std::ostream&, EmfSetDIBitsToDevice&);
-//std::ostream& operator << (std::ostream&, EmfAlphaBlend&);
-//std::ostream& operator << (std::ostream&, EmfTransparentBlt&);
+std::ostream& operator << (std::ostream&, EmfBitBltRecord&);
+std::ostream& operator << (std::ostream&, EmfStretchBltRecord&);
+std::ostream& operator << (std::ostream&, EmfMaskBltRecord&);
+std::ostream& operator << (std::ostream&, EmfPlgBltRecord&);
+std::ostream& operator << (std::ostream&, EmfSetDIBitsToDeviceRecord&);
+std::ostream& operator << (std::ostream&, EmfAlphaBlendRecord&);
+std::ostream& operator << (std::ostream&, EmfTransparentBltRecord&);
 
 // State records
 std::ostream& operator << (std::ostream&, EmfSetWindowOrgExRecord&);

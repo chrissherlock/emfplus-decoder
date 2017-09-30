@@ -161,6 +161,12 @@ EmfRecord *ReadPlgBltRecord(ifstream &emfFile) {
     emfFile.read(reinterpret_cast<char *>(&plgBltRecord.Bounds->top), 4);
     emfFile.read(reinterpret_cast<char *>(&plgBltRecord.Bounds->right), 4);
     emfFile.read(reinterpret_cast<char *>(&plgBltRecord.Bounds->bottom), 4);
+    emfFile.read(reinterpret_cast<char *>(&plgBltRecord.dstPoint1->x), 4),
+    emfFile.read(reinterpret_cast<char *>(&plgBltRecord.dstPoint1->y), 4),
+    emfFile.read(reinterpret_cast<char *>(&plgBltRecord.dstPoint2->x), 4),
+    emfFile.read(reinterpret_cast<char *>(&plgBltRecord.dstPoint2->y), 4),
+    emfFile.read(reinterpret_cast<char *>(&plgBltRecord.dstPoint3->x), 4),
+    emfFile.read(reinterpret_cast<char *>(&plgBltRecord.dstPoint3->y), 4),
     emfFile.read(reinterpret_cast<char *>(&plgBltRecord.xSrc), 4);
     emfFile.read(reinterpret_cast<char *>(&plgBltRecord.ySrc), 4);
     emfFile.read(reinterpret_cast<char *>(&plgBltRecord.cxSrc), 4);

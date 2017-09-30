@@ -65,6 +65,6 @@ struct EmfColorMatchToTargetWRecord : EmfRecord {
 
 struct EmfForceUFIMappingRecord : EmfRecord {
     UniversalFontId ufi;
-}
+};
 
 #endif

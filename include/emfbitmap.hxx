@@ -35,7 +35,7 @@ int isTransformRecord(unsigned int);
 
 // [MS-EMF] section 2.3.1.2 EMR_BITBLT
 
-struct EmfBitBlt : EmfRecord {
+struct EmfBitBltRecord : EmfRecord {
     RectL           *Bounds;
     int             xDest;
     int             yDest;
@@ -55,7 +55,7 @@ struct EmfBitBlt : EmfRecord {
     char            *BitsSrc;
 };
 
-struct EmfStretchBlt : EmfRecord {
+struct EmfStretchBltRecord : EmfRecord {
     RectL           *Bounds;
     int             xDest;
     int             yDest;
@@ -74,7 +74,7 @@ struct EmfStretchBlt : EmfRecord {
     char            *BmiSrc;
 };
 
-struct EmfMaskBlt : EmfRecord {
+struct EmfMaskBltRecord : EmfRecord {
     RectL           *Bounds;
     int             xDest;
     int             yDest;
@@ -107,9 +107,11 @@ struct EmfMaskBlt : EmfRecord {
     char            *BitsMask;
 };
 
-struct EmfPlgBlt : EmfRecord {
+struct EmfPlgBltRecord : EmfRecord {
     RectL           *Bounds;
-    PointL          *aptlDest;
+    PointL          *dstPoint1;
+    PointL          *dstPoint2;
+    PointL          *dstPoint3;
     int             xSrc;
     int             ySrc;
     int             cxSrc;
@@ -134,7 +136,7 @@ struct EmfPlgBlt : EmfRecord {
     char            *BitsMask;
 };
 
-struct EmfSetDIBitsToDevice : EmfRecord {
+struct EmfSetDIBitsToDeviceRecord : EmfRecord {
     RectL           *Bounds;
     int             xDest;
     int             yDest;
@@ -153,7 +155,7 @@ struct EmfSetDIBitsToDevice : EmfRecord {
     char            *BitsSrc;
 };
 
-struct EmfStretchDIBits : EmfRecord {
+struct EmfStretchDIBitsRecord : EmfRecord {
     RectL           *Bounds;
     int             xDest;
     int             yDest;
@@ -173,7 +175,7 @@ struct EmfStretchDIBits : EmfRecord {
     char            *BitsSrc;
 };
 
-struct EmfAlphaBlend : EmfRecord {
+struct EmfAlphaBlendRecord : EmfRecord {
     RectL           *Bounds;
     int             xDest;
     int             yDest;
@@ -191,7 +193,7 @@ struct EmfAlphaBlend : EmfRecord {
     ColorRef        *BkColorSrc;
     unsigned int    UsageSrc;
     unsigned int    offBmiSrc;
-    unsigned int    cbBmsSrc;
+    unsigned int    cbBmiSrc;
     unsigned int    offBitsSrc;
     unsigned int    cbBitsSrc;
     int             cxSrc;
@@ -200,13 +202,13 @@ struct EmfAlphaBlend : EmfRecord {
     char            *BitsSrc;
 };
 
-struct EmfTransparentBlt : EmfRecord {
+struct EmfTransparentBltRecord : EmfRecord {
     RectL           *Bounds;
     int             xDest;
     int             yDest;
     int             cxDest;
     int             cyDest;
-    ColorRef        *TransparentColorSrc;
+    ColorRef        *TransparentColor;
     int             xSrc;
     int             ySrc;
     XForm           *XformSrc;

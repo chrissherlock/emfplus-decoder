@@ -1,6 +1,7 @@
 CC          = clang++ -std=c++11
 DEBUG       = -g
-CXXFILES    = main.cxx $(EMFHDRFILES) $(PRINTFILES) $(EMFRECORDS)
+CXXFILES    = main.cxx $(WMF) $(EMFHDRFILES) $(PRINTFILES) $(EMFRECORDS)
+WMF			= wmf.cxx
 EMFHDRFILES = header.cxx emfrecord.cxx
 EMFRECORDS  = emfclipping.cxx emfstate.cxx emfbitmap.cxx
 PRINTFILES  = header_output.cxx bitmap_output.cxx
